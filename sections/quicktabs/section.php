@@ -24,7 +24,7 @@ class QuickTabs extends PageLinesSection {
     // Begin Section Functions 
 
     function section_styles(){
-		wp_enqueue_script( 'tabdrop', $this->base_url.'/js/bootstrap-tabdrop.js',array( 'jquery' ), self::version, true);
+		wp_enqueue_script( 'tabdrop', $this->base_url.'/js/bootstrap-tabdrop.js',array( 'jquery' ), self::version);
 		
 	}
 

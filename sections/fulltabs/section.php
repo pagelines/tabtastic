@@ -17,130 +17,22 @@
  * @package PageLines Framework
  * @author PageLines
  */
+
+
+
 class FullTabs extends PageLinesSection {
 	var $taxID = 'tabs-sets';
 	var $ptID = 'tabtastic';
 	
+	const version = '1.0';
+
 	
-
-	// Tabtastic Shortcode
-    function tabtastic_shortcode($atts,$content = null) {
-
-        global $post; global $pagelines_ID;
-		$oset = array('post_id' => $pagelines_ID);
-
-        extract( shortcode_atts( array(
-        	
-        	'tab_orderby' => 'ID',
-        	'tab_order' => 'DESC',
-            'tab_color'     => '#000000',
-            'tab_background'    => '#fafafa',
-            'pane_color' => '#000000',
-            'pane_background' =>'#ffffff',
-            'tab_set' => '',
-            'tabs_id' => rand()
-        ), $atts ) );
-
-        $args = array(
-             
-            'post_type'  => $this->ptID,
-            'orderby' => $tab_orderby,
-            'order' => '$tab_order',
-            'tax_query' => array(array(
-                'taxonomy' => $this->taxID,
-                'field' => 'slug',
-                'terms' => array($tab_set),
-            ))
-        );
-    
-        $sc_query = new WP_Query($args);
-
-        $output = '<div class="tabtastic '.$tabs_id. '" ><ul class="nav nav-tabs">';
-
-				 while ( $sc_query->have_posts() ) : $sc_query->the_post();
-					 
-				 	$tab_title_color = ( get_post_meta($post->ID, 'tab_title_color', $oset ));
-					$tab_title_bg = ( get_post_meta( $post->ID, 'tab_title_background', $oset ) );
-		
-						if(get_post_meta($post->ID, 'tab_title_color', $oset)) {
-							$style_color = 'color:' . $tab_title_color . ';';
-						} else {
-							$style_color = 'color:' . $tab_color . ';';
-						}
-						if(get_post_meta($post->ID, 'tab_title_background', $oset)) {
-							$style_background = 'background-color:' . $tab_title_bg . ';';
-						} else {
-							$style_background = 'background-color:' . $tab_background . ';';
-						}
-
-					$output .= '<li class="tab"><a href="#tab-'. $post->ID . $tabs_id .'" data-toggle="tab" style="'. $style_background .' ' . $style_color .'">' . get_the_title() . '</a></li>';
-				
-				endwhile;
-					 
-					$output .= '</ul><div class="tab-content '. $tabs_id . '">';
-			
-			 while ( $sc_query->have_posts() ) : $sc_query->the_post(); 
-				$tab_cont = ( get_post_meta($post->ID, 'tab_content_color', $oset ));
-				$tab_cont_bg = ( get_post_meta( $post->ID, 'tab_content_background', $oset ) );
-		
-				if(get_post_meta($post->ID, 'tab_content_color', $oset)) {
-					$cont_color = 'color:' . $tab_cont . ';';
-				} else {
-					$cont_color = 'color:' . $pane_color . ';';
-				}
-				if(get_post_meta($post->ID, 'tab_content_background', $oset)) {
-					$cont_background = 'background:' . $tab_cont_bg . ';';
-				} else {
-					$cont_background = 'background:' . $pane_background . ';';
-				}
-				$output .= '<div class="tab-pane well" id="tab-'. $post->ID . $tabs_id .'" style="'. $cont_background .' '. $cont_color .' ">' . do_shortcode(get_the_content()) . '</div>';
-				
-			 endwhile;
-
-      ob_start(); 
-     	wp_enqueue_script( 'tinycolor', $this->base_url.'/js/tinycolor-min.js');
-		   
-	 ?>
-		<script>
-			
-		jQuery(document).ready(function(){	
-				// Add Active classes for Pagelines Wootabs
-				jQuery(".tabtastic.<?php echo $tabs_id?> li.tab:first").addClass("active");
-				jQuery(".tabtastic.<?php echo $tabs_id?> .tab-pane:first").addClass("active");
-				jQuery('.tabtastic.<?php echo $tabs_id?> li.tab a').click(function (e) {
-	  				e.preventDefault();
-	  				jQuery(this).tab('show');
-				});
-				
-					
-
-				// Tinycolor Implementation
-				jQuery("ul.nav.nav-tabs a").hover(
-						function() {
-							var title_bg = jQuery(this).css("background-color");
-					
-						jQuery(this).css("background-color", 
-							     tinycolor.darken(title_bg, 5).toRgbString());
-								 return false;
-						},
-						function() {
-						var title_bg = jQuery(this).css("background-color");	
-						jQuery(this).css("background-color", 
-							     tinycolor.lighten(title_bg, 5).toRgbString());
-						return false;
-						});
-
-			});
-		</script>
-		<?php
-           return $output .'</div>' . ob_get_clean(); 
-		
-    }
 
     // Begin Section Functions 
 
     function section_styles(){
-		wp_enqueue_script( 'tabdrop', $this->base_url.'/js/bootstrap-tabdrop.js');
+		wp_enqueue_script( 'tabdrop', $this->base_url.'/js/bootstrap-tabdrop.js',array( 'jquery' ), self::version);
+		
 		
 	}
 
@@ -151,7 +43,11 @@ class FullTabs extends PageLinesSection {
 		?>
 		<script>
 			jQuery(document).ready(function(){
+			
 				jQuery('.fulltabs .nav-tabs').tabdrop();
+					jQuery('.fulltabs .nav-tabs').tabdrop().on("click", function(){
+    jQuery('.fulltabs .nav-tabs').tabdrop('layout');
+});
 
 			});
 			
