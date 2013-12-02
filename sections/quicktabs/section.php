@@ -6,6 +6,9 @@
 	Description: Creates tabs using DMS Toolbox and Front End Editing
 	Class Name: QuickTabs
 	Version: 1.0
+	Filter: component
+	PageLines: true
+	v3: true
 	Demo: http://tabtastic.ellenjanemoore.com/tabs
 */
 
@@ -40,6 +43,9 @@ class QuickTabs extends PageLinesSection {
 		$quicktabs_nav_hover = $this->adjustBrightness($quicktabs_nav_bg, -20);
 		$quicktabs_array = $this->opt('quicktabs_array');
 		$count=1;
+		if( !$quicktabs_array || $quicktabs_array == 'false' || !is_array($quicktabs_array) ){
+			$quicktabs_array = array( array(), array(), array() );
+		}
 
 		// Initiate Tabdrop
 		?>
@@ -83,9 +89,9 @@ class QuickTabs extends PageLinesSection {
 				
 			</style>
 		<?php
-
+			if( is_array($quicktabs_array) ){
 			foreach( $quicktabs_array as $quicktab ){
-				$quicktab_id = $count++.'-'.$quicktabs_id;
+				$quicktab_id = $count.'-'.$quicktabs_id;
 				$active_tabs_id =  $quicktab_id;
 				$quicktab_icon = pl_array_get( 'quicktab_icon', $quicktab );
 				$quicktab_title_color = pl_array_get( 'quicktab_title_color', $quicktab ,'000');
@@ -130,7 +136,9 @@ class QuickTabs extends PageLinesSection {
 		</script>
 			
 		<?php
+		$count++;
 		}
+	}
 			
 	}
 	
@@ -242,7 +250,7 @@ class QuickTabs extends PageLinesSection {
    	printf('<div class="tabbable quicktabs %s hentry ">' , $quicktabs_id);
 			
    	$this->draw_quicktab_title();
-   	$this->draw_quicktab_content();
+  	$this->draw_quicktab_content();
 	
 	echo '</div>';	
    	
@@ -250,6 +258,9 @@ class QuickTabs extends PageLinesSection {
 
 	function draw_quicktab_title() {
 		$quicktabs_array = $this->opt('quicktabs_array');
+		if( !$quicktabs_array || $quicktabs_array == 'false' || !is_array($quicktabs_array) ){
+			$quicktabs_array = array( array(), array(), array() );
+		}
 		$quicktabs_id = $this->get_the_id();
 		$output = '';
 		$count = 1; 
@@ -260,7 +271,7 @@ class QuickTabs extends PageLinesSection {
 			
 			foreach( $quicktabs_array as $quicktab ){
 
-			$quicktab_id = $count++.'-'.$quicktabs_id;
+			$quicktab_id = $count.'-'.$quicktabs_id;
 			$quicktab_icon = pl_array_get( 'quicktab_icon', $quicktab );
 			$quicktab_title = pl_array_get( 'quicktab_title', $quicktab, __('Quick Tab ', 'tabtastic')); 
 			$icon_html = sprintf('<i class="icon icon-%s"></i>', $quicktab_icon);
@@ -269,7 +280,7 @@ class QuickTabs extends PageLinesSection {
 			else
 				$quicktab_title = sprintf('<p data-sync="quicktabs_array%s_quicktab_title">%s</p>', $count, $quicktab_title. ' ' );
 				
-			if ($quicktab_id == 1) :
+			if ($count == 1) :
 				$output .= sprintf(
 				'<li class="tab tab-%s active"><a href="#tab-%s" data-toggle="tab">%s</a></li>',
 				$quicktab_id,
@@ -292,6 +303,8 @@ class QuickTabs extends PageLinesSection {
 			);
 
 			endif;
+
+			$count++;
 	
 			}
 		}	
@@ -302,6 +315,9 @@ class QuickTabs extends PageLinesSection {
 
 	function draw_quicktab_content() {
 		$quicktabs_array = $this->opt('quicktabs_array');
+		if( !$quicktabs_array || $quicktabs_array == 'false' || !is_array($quicktabs_array) ){
+			$quicktabs_array = array( array(), array(), array() );
+		}
 		$quicktabs_id = $this->get_the_id();
 		$output = '';
 		$count = 1; 
@@ -311,7 +327,7 @@ class QuickTabs extends PageLinesSection {
 			$quicktabs_tabs = count( $quicktabs_array );
 			
 			foreach( $quicktabs_array as $quicktab ){
-			$quicktab_id = $count++.'-'.$quicktabs_id;
+			$quicktab_id = $count.'-'.$quicktabs_id;
 			$quicktab_text = pl_array_get( 'quicktab_text', $quicktab, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean id lectus sem. Cras consequat lorem.');	
 			$quicktab_text = sprintf('<div data-sync="quicktabs_array%s_quicktab_text">%s</div>', $count, $quicktab_text );
 			$quicktab_title_color = pl_array_get( 'quicktab_title_color', $quicktab ,'000');
@@ -320,7 +336,7 @@ class QuickTabs extends PageLinesSection {
 			$quicktab_cont_bg = pl_array_get( 'quicktab_cont_bg', $quicktab , 'ffffff');
 			
 			
-			if ($quicktab_id == 1) :	
+			if ($count == 1) :	
 
 			$output .= sprintf(
 				'<div class="tab-pane fade in active well" id="tab-%s" style="color: #%s; background: #%s;">%s</div>',
@@ -344,6 +360,8 @@ class QuickTabs extends PageLinesSection {
 			);
 
 			endif;
+
+			$count++;
 
 			}
 		}

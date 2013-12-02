@@ -1,10 +1,8 @@
 == Description ==
 
-Tabtastic makes creating and displaying tabbed content on your website a breeze. No need to use a ton of shortcodes to display your tabs, either add them as a section to your template or use an easy shortcode to put tabs within your post or page content.
+Tabtastic FullTabs makes creating and displaying tabbed content on your website a breeze. No need to use a ton of shortcodes to display your tabs, just create your tabs, drag the section into your template and configure.
 
-A custom post types Tabs is created on activating Tabtastic. Each tab is a separate post that is assigned to one or more tab sets (like categories). Create your page, select Tabtastic options and your tabs will display.
-
-Say goodbye to a page full of shortcodes and say hello to Tabtastic!
+Say goodbye to a page full of shortcodes and say hello to Tabtastic FullTabs!
 
 ## Features
 
@@ -12,9 +10,7 @@ Say goodbye to a page full of shortcodes and say hello to Tabtastic!
 * Group tabs into tab sets
 * Create multicolored tab sets
 * Tab set color controls with choice to override individual tab colors
-* Multiple tab sets on a page (clonable)
-* Use a Pagelines Section in your template or display tab sets using a shortcode
-
+* Multiple tab sets on a page 
 
 
 == Changelog ==

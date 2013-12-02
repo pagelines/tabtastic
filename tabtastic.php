@@ -6,6 +6,8 @@ Author URI: http://www.elsue.com
 Version: 1.0.0
 Description: A simple section that creates text that sizes to fit the container, and is responsive which means it scales with different size browsers.
 Tags: extension
+PageLines: true
+v3: true
 */
 
 class Tabtastic {
@@ -14,6 +16,9 @@ class Tabtastic {
 	 * Construct
 	 */
 	function __construct() {
+		$this->dir  = plugin_dir_path( __FILE__ );
+        $this->url  = plugins_url( '', __FILE__ );
+
 		add_action( 'init', array($this , 'register_cpt_tabtastic' ));
 		add_action( 'init', array($this,'taxonomy_setup' ));
 		add_action('add_meta_boxes', array($this,'add_tabtastic_meta_box'));
@@ -70,12 +75,10 @@ class Tabtastic {
 	        'hierarchical' => false,
 	        'description' => 'For Full Tabs in Tabtastic',
 	        'supports' => array( 'title', 'editor' ),
-	        
+	        'menu_icon' 		  		=> $this->url.'/icon.png',  // Icon Path
 	        'public' => false,
 	        'show_ui' => true,
 	        'show_in_menu' => true,
-	        'menu_position' => 15,
-	        
 	        'show_in_nav_menus' => false,
 	        'publicly_queryable' => false,
 	        'exclude_from_search' => false,
@@ -130,7 +133,7 @@ class Tabtastic {
 	}  
 	function tabtastic_meta_fields() {
 	// Field Array  
-	$prefix = 'tab_';  
+	$prefix = 'fulltab_';  
 	$custom_meta_fields = array(  
 	    
 	    array(  
