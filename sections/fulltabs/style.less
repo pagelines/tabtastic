@@ -1,6 +1,33 @@
 .section-fulltabs {
 	padding: 0 15px;
+
+	// COMMON STYLES
+// -------------
+
+// Clear any floats
+.tabbable {
+  .clearfix();
 }
+.tab-content {
+  display: table; // prevent content from running below tabs
+  width: 100%;
+}
+
+// Remove border on bottom, left, right
+.tabs-below .nav-tabs,
+.tabs-right .nav-tabs,
+.tabs-left .nav-tabs {
+  border-bottom: 0;
+}
+
+// Show/hide tabbable areas
+.tab-content > .tab-pane{
+  display: none;
+}
+.tab-content > .active {
+  display: block;
+}
+
 
 .fulltabs {
 	.hentry .nav-tabs > li{
@@ -14,34 +41,45 @@
 	  ul.nav.nav-tabs a:hover {
 	    text-decoration:none;
 	  }
-	   .dropdown-menu .active > a, .dropdown-menu .active > a:hover {
+
+	  .dropdown-menu .active > a, .dropdown-menu .active > a:hover {
 	  	background-image: none;
 	  }
 	  .dropdown-menu  a, .dropdown-menu a:hover {
 	  	background-image: none;
 	  }
 
+
 	// TABS
 	// ----
 
-	.nav-tabs,
-.nav-pills {
-	position: relative;
-}
+	.nav-tabs {
+		position: relative;
+	}
 
 	// Give the tabs something to sit on
 	.nav-tabs {
 	  border-bottom: none;
 	  margin-bottom: -1px;
+
+	}
+
+	.nav-tabs p {
+		margin: 0;
 	}
 
 	// Make the list-items overlay the bottom border
 	.nav-tabs > li {
 	  margin-bottom: 0;
+
+
 	}
+
+
 	.nav-tabs > .pull-right {
 		float: right;
 	}
+	
 
 	// Actual tabs (as links)
 	.nav-tabs > li > a {
@@ -54,14 +92,15 @@
 	    border-color: transparent;
 	  }
 	}
+
 	// Active state, and it's :hover to override normal :hover
 	.nav-tabs > .active > a,
 	.nav-tabs > .active > a:hover {
 	 
-	  
 	  border: 2px solid transparent;
 	  border-bottom-color: transparent;
 	  cursor: default;
+
 	  
 	}
 
@@ -71,15 +110,7 @@
 	}
 
 	
-	.tab-pane {
-		margin: 0;
-
-	}
-
-	// Clear any floats
-	.tabbable {
-	  .clearfix();
-	}
+	
 	.tab-content {
 	  display: table; // prevent content from running below tabs
 	  width: 100%;
@@ -88,5 +119,16 @@
 	  p {
 	  	padding-left:0;
 	  }
+	 
 	}
+	
+	.well {
+	/*	margin: -23px 0 0; */
+		margin: 0;
+		background-image: none;
+		
+	}
+
+
+}
 }

@@ -14,23 +14,23 @@ class Tabtastic {
 	 * Construct
 	 */
 	function __construct() {
-		add_action( 'init', array(&$this , 'register_cpt_tabtastic' ));
-		add_action( 'init', array(&$this,'taxonomy_setup' ));
-		add_action('add_meta_boxes', array(&$this,'add_tabtastic_meta_box'));
-		add_action( 'admin_enqueue_scripts', array(&$this,'mw_enqueue_color_picker' ));
-		add_action('admin_head', array(&$this,'add_custom_scripts')); 
-		add_action('save_post', array(&$this,'save_tabtastic_meta'));
+		add_action( 'init', array($this , 'register_cpt_tabtastic' ));
+		add_action( 'init', array($this,'taxonomy_setup' ));
+		add_action('add_meta_boxes', array($this,'add_tabtastic_meta_box'));
+		add_action( 'admin_enqueue_scripts', array($this,'tabtastic_enqueue_color_picker' ));
+		add_action('admin_head', array($this,'add_tabtastic_colorpicker_script')); 
+		add_action('save_post', array($this,'save_tabtastic_meta'));
 	}
 
 
-	function mw_enqueue_color_picker( $hook_suffix ) {
+	function tabtastic_enqueue_color_picker( $hook_suffix ) {
 	    // first check that $hook_suffix is appropriate for your admin page
 	    wp_enqueue_style( 'wp-color-picker' );
-	   wp_enqueue_script( 'wp-color-picker' , false, true );
+	   	wp_enqueue_script( 'wp-color-picker' , false, true );
 	}
 
  
-	function add_custom_scripts() {  
+	function add_tabtastic_colorpicker_script() {  
 	    global  $post;  
 	    $custom_meta_fields = $this->tabtastic_meta_fields();
 	      

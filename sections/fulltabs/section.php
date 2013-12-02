@@ -26,44 +26,86 @@ class FullTabs extends PageLinesSection {
 	
 	const version = '1.0';
 
-	
-
     // Begin Section Functions 
 
     function section_styles(){
-		wp_enqueue_script( 'tabdrop', $this->base_url.'/js/bootstrap-tabdrop.js',array( 'jquery' ), self::version);
-		
+		wp_enqueue_script( 'tabdrop', $this->base_url.'/../../js/bootstrap-tabdrop.js',array( 'jquery' ), self::version);		
 		
 	}
 
 
 	
 	function section_head(){
+		$fulltabs_clone = $this->get_the_id();
+		$fulltabs_id = 'tabs-'.$this->get_the_id();
+		$tabs_width = ($this->opt('tab_max_width')) ? $this->opt('tab_max_width') : null;
+		$tab_nav_text = ($this->opt('tab_nav_text')) ? $this->opt('tab_nav_text') : __('<i class="icon-align-justify"></i>', 'tabtastic');
+		$tab_nav_color = ( $this->opt( 'tab_nav_color'  ) ) ? $this->opt( 'tab_nav_color'  ) : '000000';
+		$tab_nav_bg = ( $this->opt( 'tab_nav_bg'  ) ) ? $this->opt( 'tab_nav_bg'  ) : 'ffffff';
+		$tab_nav_hover = $this->adjustBrightness($tab_nav_bg, -20);
+		
 		// Initiate Tabdrop
 		?>
 		<script>
 			jQuery(document).ready(function(){
 			
-				jQuery('.fulltabs .nav-tabs').tabdrop();
-					jQuery('.fulltabs .nav-tabs').tabdrop().on("click", function(){
-    jQuery('.fulltabs .nav-tabs').tabdrop('layout');
-});
+					jQuery('.fulltabs .nav-tabs').tabdrop({
+						text: '<?php echo $tab_nav_text ?>'
+					}).on("click", function(){
+				    	jQuery('.fulltabs .nav-tabs').tabdrop('layout');
+					});
+
+		//Set height
+			var height = 0;
+			jQuery('.fulltabs.<?php echo $fulltabs_id;?> li.tab a').each(function(){
+			    if(height < jQuery(this).height())
+			        height = jQuery(this).height();    
+			});
+			//+20 because of the top-offset
+			jQuery(".fulltabs.<?php echo $fulltabs_id;?> li.tab a").css("height",(height)+"px"); 
 
 			});
 			
 		
 		</script>
+
+		<?php
+		 if($tabs_width) {
+			?>
+			<style type="text/css">
+				.fulltabs.<?php echo $fulltabs_id;?> li.tab a{
+					width: <?php echo $tabs_width ?>px;
+				}
+		</style>
 		<?php
 		 
 		}
+		// Styling for Tabdrop Dropdown
+		?>
+			<style>
+				#fulltabs<?php echo $fulltabs_clone ?> .tabdrop .dropdown-toggle {
+					color: #<?php echo $tab_nav_color ?>;
+					background: #<?php echo $tab_nav_bg ?>;
+				}
+				#fulltabs<?php echo $fulltabs_clone ?> .tabdrop .caret{
+					border-top-color: #<?php echo $tab_nav_color ?>;
+					border-bottom-color: #<?php echo $tab_nav_color ?>;
+					
+				}
+				#fulltabs<?php echo $fulltabs_clone ?> .tabdrop .dropdown-toggle:hover {
+					background: <?php echo $tab_nav_hover ?>;
+				}
+				
+			</style>
+		<?php
+}
 	
 
 	/**
 	* PHP that always loads no matter if section is added or not.
 	*/
 	function section_persistent(){
-		
-		 add_shortcode('tabtastic',array(&$this,'tabtastic_shortcode'));	
+			
 		
 	}
 	
@@ -71,100 +113,130 @@ class FullTabs extends PageLinesSection {
 
 	// Section Options Method
     function section_opts(){
-        $opts = array(
-            array(
-                'type'		=> 'select_taxonomy',
-				'taxonomy_id'	=> $this->taxID,
-				'default'		=> 'default-tabs',
-                'title'         => 'Select Tab Set',
-                'key'           => 'tab_set',
-                'label'         => 'Tab Set'
-                
-            ),
-            array(
-            'key'           => 'tab_ordering',
-            'type'          => 'multi',
-            'default'		=> 'ID',
-            'title'         => 'Tab Ordering', 
-            'opts'=> array(
-                array(
-	            'key'           => 'tab_orderby',
-	            'type'          => 'select', 
-	            'label'         => 'Order Tabs By',
-	            'opts'=> array(
-	                'ID' 		=> array('name' => __( 'Post ID (default)', 'tabtastic') ),
-					'title' 	=> array('name' => __( 'Title', 'tabtastic') ),
-					'date' 		=> array('name' => __( 'Date', 'tabtastic') ),
-					'modified' 	=> array('name' => __( 'Last Modified', 'tabtastic') ),
-					'rand' 		=> array('name' => __( 'Random', 'tabtastic') ),
-				)
-				
-            ), 
-                array(
-                    'key'           => 'tab_order',
-		            'type'          => 'select',
-		            'default'		=> 'DESC', 
-		            'label'         => 'Descending or Ascending?',
+
+		$options = array();
+
+		$options[] = array(
+			'key'           => 'tab_set_options',
+			'title' => __( 'FullTabs Options', 'tabtastic' ),
+			'type'	=> 'multi',
+			'col'		=> 1,
+        	'opts'=> array(
+	            array(
+	                'type'		=> 'select_taxonomy',
+					'taxonomy_id'	=> $this->taxID,
+					'default'		=> 'default-tabs',
+	                'title'         => 'Select Tab Set',
+	                'key'           => 'tab_set',
+	                'label'         => 'Tab Set'
+	                
+	            ),
+	                array(
+		            'key'           => 'tab_orderby',
+		            'type'          => 'select', 
+		            'label'         => 'Order Tabs By',
 		            'opts'=> array(
-		                'DESC' 		=> array('name' => __( 'Descending', 'tabtastic') ),
-						'ASC' 		=> array('name' => __( 'Ascending', 'tabtastic') ),
-								
-                )
+		                'ID' 		=> array('name' => __( 'Post ID (default)', 'tabtastic') ),
+						'title' 	=> array('name' => __( 'Title', 'tabtastic') ),
+						'date' 		=> array('name' => __( 'Date', 'tabtastic') ),
+						'modified' 	=> array('name' => __( 'Last Modified', 'tabtastic') ),
+						'rand' 		=> array('name' => __( 'Random', 'tabtastic') ),
+					)
+					
+	            ), 
+	                array(
+	                    'key'           => 'tab_order',
+			            'type'          => 'select',
+			            'default'		=> 'DESC', 
+			            'label'         => 'Descending or Ascending?',
+			            'opts'=> array(
+			                'DESC' 		=> array('name' => __( 'Descending', 'tabtastic') ),
+							'ASC' 		=> array('name' => __( 'Ascending', 'tabtastic') ),
+									
+	                )
+			     ),       
 		           
             )
-                
-          )
-		),
-			array(
+	
+	);
+			$options[] = array(
 	            'key'           => 'tab_set_colors',
 	            'type'          => 'multi', 
-	            'title'         => 'Tab Colors', 
+	            'title'         => 'FullTab Colors', 
+	            'col'			=> 2,
 	            'help'			=> 'You may set individual tab colors when you create or edit a tab. Individual tab colors will override the colors set here unless you select Override Tab Colors below.',
 	            'opts'=> array(
 	                array(
 	                   'key'           => 'tab_set_title_color',
             			'type'          => 'color', 
             			'default'		=> '#000000',
-						'label'			=> 'Tab Title Text',
+						'label'			=>  __( 'Tab Title Text','tabtastic' ),
 	                ), 
 	                array(
 	                    'key'           => 'tab_set_title_bg',
            				'type'          => 'color', 
            				'default'		=> '#dddddd',
-						'label'			=> 'Tab Title Background',
+						'label'			=>  __( 'Tab Title Background','tabtastic' ),
 									
 	                ),
 	                array(
 	                    'key'           => 'tab_set_cont',
            				'type'          => 'color', 
            				'default'		=> '#000000',
-						'label'			=> 'Tab Content Text',
+						'label'			=>  __( 'Tab Content Text','tabtastic' ),
 	                ),
 	                array(
 	                    'key'           => 'tab_set_cont_bg',
            				'type'          => 'color', 
            				'default'		=> '#ffffff',
-						'label'			=> 'Tab Content BG',
+						'label'			=>  __( 'Tab Content BG','tabtastic' ),
 	                ),
 	                array(
 			            'key'           => 'color_override',
 			            'type'          => 'check',  
-			            'label'			=> 'Override Individual Tab Colors?',
+			            'label'			=>  __( 'Override Individual Tab Colors?','tabtastic' ),
 
-			        )
+			        ),
 
-	              )
-	            ),
+	            )
+	        );
+		
+			$options[] = array(
+
+			'title' => __( 'Additional Options', 'tabtastic' ),
+			'type'	=> 'multi',
+			'col'		=> 1,
+        	'opts'=> array(
 				 array(
 					'key'			=> 'tab_max_width',
 					'type' 			=> 'text',
-					
-					'label' 	=> __( 'Max Width of Each Title Tab (Optional)', 'tabtastic' ),
+					'label' 	=> __( 'Width of Each Title Tab (Optional)', 'tabtastic' ),
 				),
+				 array(
+					'key'			=> 'tab_nav_text',
+					'type' 			=> 'text',
+					'default'		=> '<i class="icon-align-justify"></i>',
+					'label' 	=> __( 'Text for More Tabs Navigation. Icon class can be used here', 'tabtastic' ),
+				),
+				array(
+                   'key'           => 'tab_nav_color',
+        			'type'          => 'color', 
+        			'default'		=> '#000000',
+					'label'			=> __( 'More Tabs Navigation Text Color', 'tabtastic' ),
+                ), 
+                array(
+                    'key'           => 'tab_nav_bg',
+       				'type'          => 'color', 
+       				'default'		=> '#ffffff',
+					'label'			=> __( 'More Tabs Navigation Background Color', 'tabtastic' ),
+								
+                ),
 
+             )   
 
         ); 
-        return $opts;
+        
+        return $options;
     }
 	
 	
@@ -175,7 +247,7 @@ class FullTabs extends PageLinesSection {
 	*/
    function section_template() {    
 	
-		$fulltabs_id = 'tabs-clone'.$this->get_the_id();
+		$fulltabs_id = 'tabs-'.$this->get_the_id();
 		global $post;
 
 		// Options
@@ -228,7 +300,7 @@ class FullTabs extends PageLinesSection {
 		global $post; global $pagelines_ID;	
 		global $title_count;	
 		
-		$fulltabs_id = $this->get_the_id();		
+		$fulltabs_id = 'tabs-'.$this->get_the_id();		
 		$tab_set_title_color = ( $this->opt( 'tab_set_title_color'  ) ) ? $this->opt( 'tab_set_title_color'  ) : '000';
 		$tab_set_title_bg = ( $this->opt( 'tab_set_title_bg'  ) ) ? $this->opt( 'tab_set_title_bg'  ) : 'dddddd';
 		$tab_title_color = ( get_post_meta($post->ID, 'tab_title_color', true ));
@@ -236,20 +308,20 @@ class FullTabs extends PageLinesSection {
 		$color_override = ( $this->opt( 'color_override'  ) ) ? $this->opt( 'color_override'  ) : null;
 		
 		if($this->opt( 'color_override'  )) {
-			$title_color = '#' . $tab_set_title_color . ';';
+			$title_color = '#' . $tab_set_title_color;
 		}
 		elseif(get_post_meta($post->ID, 'tab_title_color', true)) {
-			$title_color = $tab_title_color . ';';
+			$title_color = $tab_title_color;
 		} else {
-			$title_color = '#' . $tab_set_title_color . ';';
+			$title_color = '#' . $tab_set_title_color;
 		}
 		if($this->opt( 'color_override'  )) {
-			$title_background = '#' . $tab_set_title_bg . ';';
+			$title_background = '#' . $tab_set_title_bg ;
 		}
 		elseif(get_post_meta($post->ID, 'tab_title_background', true)) {
-			$title_background = $tab_title_bg . ';';
+			$title_background = $tab_title_bg;
 		} else {
-			$title_background = '#' . $tab_set_title_bg . ';';
+			$title_background = '#' . $tab_set_title_bg;
 		}
 		
 		$active_background = $this->adjustBrightness($title_background, -20);
@@ -280,15 +352,15 @@ class FullTabs extends PageLinesSection {
 		}
 		?>
 			<style type="text/css">
-				#fulltabs<?php echo $fulltabs_id ?> .tab-<?php echo $post_number ?>  a {
+				.fulltabs.<?php echo $fulltabs_id ?> li.tab-<?php echo $post_number ?>  a {
 					background-color: <?php echo $title_background ?>;
 					color: <?php echo $title_color ?>;
 				}
-				#fulltabs<?php echo $fulltabs_id ?> .active.tab-<?php echo $post_number ?> a
+				.fulltabs.<?php echo $fulltabs_id ?> li.active.tab-<?php echo $post_number ?> a
 				 {
 					background-color: <?php echo $active_background ?>;
 				}
-				#fulltabs<?php echo $fulltabs_id ?> .tab-<?php echo $post_number ?> a:hover  {
+				.fulltabs.<?php echo $fulltabs_id ?> li.tab-<?php echo $post_number ?> a:hover  {
 					background-color: <?php echo $active_background ?>;
 				}
 			</style>
@@ -300,7 +372,7 @@ class FullTabs extends PageLinesSection {
 		global $post; global $pagelines_ID;
 		global $content_count;
 		
-		$fulltabs_id = $this->get_the_id();
+		$fulltabs_id = 'tabs-'.$this->get_the_id();
 		$tab_set_cont = ( $this->opt( 'tab_set_cont'  ) ) ? $this->opt( 'tab_set_cont'  ) : '000';
 		$tab_set_cont_bg = ( $this->opt( 'tab_set_cont_bg'  ) ) ? $this->opt( 'tab_set_cont_bg'  ) : 'ffffff';
 		$tab_cont = ( get_post_meta($post->ID, 'tab_content_color', true ));
@@ -308,37 +380,49 @@ class FullTabs extends PageLinesSection {
 		$color_override = ( $this->opt( 'color_override'  ) ) ? $this->opt( 'color_override'  ) : null;
 		
 		if($color_override) {
-			$style_color = 'color:' . $tab_set_cont . ';';
+			$style_color = '#' . $tab_set_cont;
 		}
 		elseif(get_post_meta($post->ID, 'tab_content_color', true)) {
-			$style_color = 'color:' . $tab_cont . ';';
+			$style_color = $tab_cont;
 		} else {
-			$style_color = 'color:' . $tab_set_cont . ';';
+			$style_color = '#' . $tab_set_cont;
 		}
 		if($color_override) {
-			$style_background = 'background:' . $tab_set_cont_bg . ';';
+			$style_background = '#' . $tab_set_cont_bg;
 		}
 		elseif(get_post_meta($post->ID, 'tab_content_background', true)) {
-			$style_background = 'background:' . $tab_cont_bg . ';';
+			$style_background =  $tab_cont_bg;
 		} else {
-			$style_background = 'background:' . $tab_set_cont_bg . ';';
+			$style_background = '#' . $tab_set_cont_bg;
 		}
 
 		
 		$post_number= $post->ID . '-' .$fulltabs_id;			
 		$content_count++;
 		if($content_count == 1) {
-		printf('<div class="tab-pane active well" id="tab-%s" style="%s %s">' , $post_number, $style_color, $style_background);
+		printf('<div class="tab-pane well tab-%s active" id="tab-%s">' , $post_number,  $post_number);
 					the_content() ?>
 				</div>
 			<?php
 		} else {
-			printf('<div class="tab-pane well" id="tab-%s" style="%s %s">' , $post_number, $style_color, $style_background);
+			printf('<div class="tab-pane well tab-%s" id="tab-%s">' , $post_number,  $post_number);
 					the_content() ?>
 				</div>
 			<?php
 
 		}
+
+		
+	
+		?>
+			<style type="text/css">
+				.fulltabs.<?php echo $fulltabs_id ?> .tab-pane.well.tab-<?php echo $post_number ?> {
+					background-color: <?php echo $style_background ?>;
+					color: <?php echo $style_color ?>;
+				}
+				
+			</style>
+			<?php
 	}
 			
 
