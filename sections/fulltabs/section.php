@@ -50,10 +50,8 @@ class FullTabs extends PageLinesSection {
 		<script>
 			jQuery(document).ready(function(){
 			
-					jQuery('.fulltabs .nav-tabs').tabdrop({
+					jQuery('.fulltabs.<?php echo $fulltabs_id;?> .nav-tabs').tabdrop({
 						text: '<?php echo $fulltab_nav_text ?>'
-					}).on("click", function(){
-				    	jQuery('.fulltabs .nav-tabs').tabdrop('layout');
 					});
 
 		//Set height
@@ -251,6 +249,25 @@ class FullTabs extends PageLinesSection {
 		$fulltabs_id = 'tabs-'.$this->get_the_id();
 		global $post;
 
+		
+
+				
+		// Begin Template	
+
+
+			?>
+
+			<div class="fulltabs tabbable hentry <?php echo $fulltabs_id;?>" >
+				<?php  
+					$this->draw_fulltab_title(); 
+					$this->draw_fulltab_content();
+			 	?>
+		</div>
+				
+		<?php
+	}
+
+	function fulltabs_query() {
 		// Options
 			
 			$fulltab_set = ( $this->opt( 'fulltab_set'  ) ) ? $this->opt( 'fulltab_set'  ) : null;
@@ -263,227 +280,169 @@ class FullTabs extends PageLinesSection {
 				$params = array( 'orderby'	=> $orderby, 'order' => $order, 'post_type'	=> $this->ptID, 'posts_per_page' => -1 );
 				$params[ $this->taxID ] = ( $this->opt( 'fulltab_set'  ) ) ? $this->opt( 'fulltab_set'  ) : null;
 				$fulltabs_query = new WP_Query( $params );
-				$title_count = 0;
-				$content_count = 0;
+				return $fulltabs_query;				
 
-				if(empty($fulltabs_query->posts)){
-					echo setup_section_notify( $this, 'Add Tab Posts To Activate.', admin_url('edit.php?post_type='.$this->ptID), 'Add Posts' );
-					return;
-				}
-		
-
-				
-		// Begin Template	
-
-
-			?>
-
-			<div class="fulltabs tabbable hentry <?php echo $fulltabs_id;?>" >
-				<ul class="nav nav-tabs ">
-					<?php while ( $fulltabs_query->have_posts() ) : $fulltabs_query->the_post();
-					
-
-						$this->draw_fulltab_title();
-					endwhile; ?>
-				</ul>
-			<div class="tab-content">
-				<?php while ( $fulltabs_query->have_posts() ) : $fulltabs_query->the_post(); 
-					$this->draw_fulltab_content();
-			 	endwhile; ?>
-		</div>
-				
-		<?php	
 	}
 
-
-				
 	function draw_fulltab_title(){
-		global $post; global $pagelines_ID;	
-		global $title_count;	
-		
-		$fulltabs_id = 'tabs-'.$this->get_the_id();		
-		$fulltab_set_title_color = ( $this->opt( 'fulltab_set_title_color'  ) ) ? $this->opt( 'fulltab_set_title_color'  ) : '000';
-		$fulltab_set_title_bg = ( $this->opt( 'fulltab_set_title_bg'  ) ) ? $this->opt( 'fulltab_set_title_bg'  ) : 'dddddd';
-		$fulltab_title_color = ( get_post_meta($post->ID, 'fulltab_title_color', true ));
-		$fulltab_title_bg = ( get_post_meta( $post->ID, 'fulltab_title_background', true ) );
-		$color_override = ( $this->opt( 'color_override'  ) ) ? $this->opt( 'color_override'  ) : null;
-		if($this->opt( 'color_override'  )) {
-			$title_color = '#' . $fulltab_set_title_color;
-		}
-		elseif(get_post_meta($post->ID, 'fulltab_title_color', true)) {
-			$title_color = $fulltab_title_color;
-		} else {
-			$title_color = '#' . $fulltab_set_title_color;
-		}
-		if($this->opt( 'color_override'  )) {
-			$title_background = '#' . $fulltab_set_title_bg ;
-		}
-		elseif(get_post_meta($post->ID, 'fulltab_title_background', true)) {
-			$title_background = $fulltab_title_bg;
-		} else {
-			$title_background = '#' . $fulltab_set_title_bg;
-		}
-		
-		$active_background = $this->adjustBrightness($title_background, -20);
-		$post_number= $post->ID . '-' .$fulltabs_id;	
-		$title_count++;
-		if($title_count == 1) {
-		 printf('<li class="tab tab-%s active"><a href="#tab-%s" data-toggle="tab">',
-			$post_number,
-			$post_number
-			
-		);
-		 the_title();
-		
+		global $post;
+		$fulltabs_query = $this->fulltabs_query();
+		$fulltabs_id = 'tabs-'.$this->get_the_id();	
 		?>
-	</a></li>
-	<?php
-		} else {
-			 printf('<li class="tab tab-%s"><a href="#tab-%s" data-toggle="tab">',
-			$post_number,
-			$post_number
-			
-		);
-		 the_title();
-		
-		?>
-	</a></li>
-	<?php
-		}
-		?>
-			<style type="text/css">
-				.fulltabs.<?php echo $fulltabs_id ?> li.tab-<?php echo $post_number ?>  a {
-					background-color: <?php echo $title_background ?>;
-					color: <?php echo $title_color ?>;
+		<ul class="nav nav-tabs ">
+			<?php if ( $fulltabs_query->have_posts() ) : $title_count=0; while ( $fulltabs_query->have_posts() ) : $title_count++; $fulltabs_query->the_post();	
+						
+				$fulltab_set_title_color = ( $this->opt( 'fulltab_set_title_color'  ) ) ? $this->opt( 'fulltab_set_title_color'  ) : '000';
+				$fulltab_set_title_bg = ( $this->opt( 'fulltab_set_title_bg'  ) ) ? $this->opt( 'fulltab_set_title_bg'  ) : 'dddddd';
+				$fulltab_title_color = ( get_post_meta($post->ID, 'fulltab_title_color', true ));
+				$fulltab_title_bg = ( get_post_meta( $post->ID, 'fulltab_title_background', true ) );
+				$color_override = ( $this->opt( 'color_override'  ) ) ? $this->opt( 'color_override'  ) : null;
+				if($this->opt( 'color_override'  )) {
+					$title_color = '#' . $fulltab_set_title_color;
 				}
-				.fulltabs.<?php echo $fulltabs_id ?> li.active.tab-<?php echo $post_number ?> a
-				 {
-					background-color: <?php echo $active_background ?>;
+				elseif(get_post_meta($post->ID, 'fulltab_title_color', true)) {
+					$title_color = $fulltab_title_color;
+				} else {
+					$title_color = '#' . $fulltab_set_title_color;
 				}
-				.fulltabs.<?php echo $fulltabs_id ?> li.tab-<?php echo $post_number ?> a:hover  {
-					background-color: <?php echo $active_background ?>;
+				if($this->opt( 'color_override'  )) {
+					$title_background = '#' . $fulltab_set_title_bg ;
 				}
-			</style>
+				elseif(get_post_meta($post->ID, 'fulltab_title_background', true)) {
+					$title_background = $fulltab_title_bg;
+				} else {
+					$title_background = '#' . $fulltab_set_title_bg;
+				}
+				
+				$active_background = $this->adjustBrightness($title_background, -20);
+				$post_number= $post->ID . '-' .$fulltabs_id;	
+				if($title_count == 1) {
+				 printf('<li class="tab tab-%s active"><a href="#tab-%s" data-toggle="tab">',
+					$post_number,
+					$post_number
+					
+				);
+				 the_title();
+				
+				?>
+			</a></li>
 			<?php
+				} else {
+					 printf('<li class="tab tab-%s"><a href="#tab-%s" data-toggle="tab">',
+					$post_number,
+					$post_number
+					
+				);
+				 the_title();
+				
+				?>
+			</a></li>
+			<?php
+				}
+				?>
+					<style type="text/css">
+						.fulltabs.<?php echo $fulltabs_id ?> li.tab-<?php echo $post_number ?>  a {
+							background-color: <?php echo $title_background ?>;
+							color: <?php echo $title_color ?>;
+						}
+						.fulltabs.<?php echo $fulltabs_id ?> li.active.tab-<?php echo $post_number ?> a
+						 {
+							background-color: <?php echo $active_background ?>;
+						}
+						.fulltabs.<?php echo $fulltabs_id ?> li.tab-<?php echo $post_number ?> a:hover  {
+							background-color: <?php echo $active_background ?>;
+						}
+					</style>
+					<?php	
+
+					endwhile; 
+					endif;
+					?>
+				</ul>
+	
+		<?php
+		
 
 	}
 
 	function draw_fulltab_content() {
-		global $post; global $pagelines_ID;
-		global $content_count;
-		$edit_link = get_edit_post_link( $post->ID);
-		
+		global $post; 
+		$fulltabs_query=$this->fulltabs_query();
 		$fulltabs_id = 'tabs-'.$this->get_the_id();
-		$fulltab_set_cont = ( $this->opt( 'fulltab_set_cont'  ) ) ? $this->opt( 'fulltab_set_cont'  ) : '000';
-		$fulltab_set_cont_bg = ( $this->opt( 'fulltab_set_cont_bg'  ) ) ? $this->opt( 'fulltab_set_cont_bg'  ) : 'ffffff';
-		$fulltab_cont = ( get_post_meta($post->ID, 'fulltab_content_color', true ));
-		$fulltab_cont_bg = ( get_post_meta( $post->ID, 'fulltab_content_background', true ) );
-		$color_override = ( $this->opt( 'color_override'  ) ) ? $this->opt( 'color_override'  ) : null;
-		
-		if($color_override) {
-			$style_color = '#' . $fulltab_set_cont;
-		}
-		elseif(get_post_meta($post->ID, 'fulltab_content_color', true)) {
-			$style_color = $fulltab_cont;
-		} else {
-			$style_color = '#' . $fulltab_set_cont;
-		}
-		if($color_override) {
-			$style_background = '#' . $fulltab_set_cont_bg;
-		}
-		elseif(get_post_meta($post->ID, 'fulltab_content_background', true)) {
-			$style_background =  $fulltab_cont_bg;
-		} else {
-			$style_background = '#' . $fulltab_set_cont_bg;
-		}
-
-		
-		$post_number= $post->ID . '-' .$fulltabs_id;			
-		$content_count++;
-		if($content_count == 1) {
-		printf('<div class="tab-pane fade in well tab-%s active" id="tab-%s">' , $post_number,  $post_number);
-					the_content(); 
-					if ( current_user_can('edit_post' , $post->ID) ) {       
-				    printf('<a href="%s">[edit]</a>' , $edit_link);
-				}
-				?>
-				</div>
-			<?php
-		} else {
-			printf('<div class="tab-pane fade well tab-%s" id="tab-%s">' , $post_number,  $post_number);
-					the_content();
-					if ( current_user_can('edit_post' , $post->ID) ) {       
-				    printf('<a href="%s">[edit]</a>' , $edit_link);
-				}
-				?>
-				</div>
-			<?php
-
-		}
-
-		
-	
 		?>
-			<style type="text/css">
-				.fulltabs.<?php echo $fulltabs_id ?> .tab-pane.well.tab-<?php echo $post_number ?> {
-					background-color: <?php echo $style_background ?>;
-					color: <?php echo $style_color ?>;
-				}
+			<div class="tab-content">
+				<?php if ( $fulltabs_query->have_posts() ) : $content_count=0; while ( $fulltabs_query->have_posts() ) : $content_count++; $fulltabs_query->the_post(); 
+					
+					$edit_link = get_edit_post_link( $post->ID);
+					$fulltab_set_cont = ( $this->opt( 'fulltab_set_cont'  ) ) ? $this->opt( 'fulltab_set_cont'  ) : '000';
+					$fulltab_set_cont_bg = ( $this->opt( 'fulltab_set_cont_bg'  ) ) ? $this->opt( 'fulltab_set_cont_bg'  ) : 'ffffff';
+					$fulltab_cont = ( get_post_meta($post->ID, 'fulltab_content_color', true ));
+					$fulltab_cont_bg = ( get_post_meta( $post->ID, 'fulltab_content_background', true ) );
+					$color_override = ( $this->opt( 'color_override'  ) ) ? $this->opt( 'color_override'  ) : null;
+					
+					if($color_override) {
+						$style_color = '#' . $fulltab_set_cont;
+					}
+					elseif(get_post_meta($post->ID, 'fulltab_content_color', true)) {
+						$style_color = $fulltab_cont;
+					} else {
+						$style_color = '#' . $fulltab_set_cont;
+					}
+					if($color_override) {
+						$style_background = '#' . $fulltab_set_cont_bg;
+					}
+					elseif(get_post_meta($post->ID, 'fulltab_content_background', true)) {
+						$style_background =  $fulltab_cont_bg;
+					} else {
+						$style_background = '#' . $fulltab_set_cont_bg;
+					}
+
+					
+					$post_number= $post->ID . '-' .$fulltabs_id;			
+					
+					
+					if($content_count == 1) {
+					printf('<div class="tab-pane fade in well tab-%s active" id="tab-%s">' , $post_number,  $post_number);
+								the_content(); 
+								if ( current_user_can('edit_post' , $post->ID) ) {       
+							    printf('<a href="%s">[edit]</a>' , $edit_link);
+							}
+							?>
+							</div>
+						<?php
+					} else {
+						printf('<div class="tab-pane fade well tab-%s" id="tab-%s">' , $post_number,  $post_number);
+								the_content();
+								if ( current_user_can('edit_post' , $post->ID) ) {       
+							    printf('<a href="%s">[edit]</a>' , $edit_link);
+							}
+							?>
+							</div>
+						<?php
+
+					}
+
+					
 				
-			</style>
-			<?php
+					?>
+						<style type="text/css">
+							.fulltabs.<?php echo $fulltabs_id ?> .tab-pane.well.tab-<?php echo $post_number ?> {
+								background-color: <?php echo $style_background ?>;
+								color: <?php echo $style_color ?>;
+							}
+							
+						</style>
+						<?php
+			 	endwhile; 
+			 	endif;
+			 	?>
+		</div>		
+		<?php
 	}
 			
 
-function tabtastic_default_tabs($post_type){
 
-	$d = array_reverse( $this->get_default_tabs() );
-
-	foreach($d as $dp){
-		// Create post object
-		$default_post = array();
-		$default_post['post_title'] = $dp['title'];
-		$default_post['post_content'] = $dp['text'];
-		$default_post['post_type'] = $post_type;
-		$default_post['post_status'] = 'publish';
-		if ( defined( 'ICL_LANGUAGE_CODE' ) )
-			$default_post['icl_post_language'] = ICL_LANGUAGE_CODE;
-		$newPostID = wp_insert_post( $default_post );
-
-		if(isset($dp))
-		
-
-		wp_set_object_terms($newPostID, 'default-tabs', $this->taxID );
-
-		// Add other default sets, if applicable.
-		if(isset($dp['set']))
-			wp_set_object_terms($newPostID, $dp['set'], $this->taxID, true);
-
-	}
-}
-	
-		/**
-		*
-		* @TODO document
-		*
-		*/
-		function get_default_tabs(){
-			$default_tabs[] = array(
-			        				'title' => 'Create Tabs',
-					        		'text' 	=> 'This is an tab set.'
-			    				);
-			$default_tabs[] = array(
-								       'title' => 'Second Tab',
-										'text' 	=> 'This is an tab set.'
-								);
-			$default_tabs[] = array(
-										'title' => 'Third Tab',
-										'text' 	=> 'This is an tab set.'
-								    				);
-			return apply_filters('tabtastic_default_tabs', $default_tabs);
-		}
-
-		function adjustBrightness($hex, $steps) {
+	function adjustBrightness($hex, $steps) {
 	    // Steps should be between -255 and 255. Negative = darker, positive = lighter
 	    $steps = max(-255, min(255, $steps));
 
