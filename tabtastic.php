@@ -56,18 +56,18 @@ class Tabtastic {
 	function register_cpt_tabtastic() {
 
 	    $labels = array( 
-	        'name' => _x( 'Tabs', 'tabtastic' ),
-	        'singular_name' => _x( 'Tab', 'tabtastic' ),
+	        'name' => _x( 'FullTabs', 'tabtastic' ),
+	        'singular_name' => _x( 'FullTab', 'tabtastic' ),
 	        'add_new' => _x( 'Add New', 'tabtastic' ),
-	        'add_new_item' => _x( 'Add New Tab', 'tabtastic' ),
-	        'edit_item' => _x( 'Edit Tab', 'tabtastic' ),
-	        'new_item' => _x( 'New Tab', 'tabtastic' ),
-	        'view_item' => _x( 'View Tab', 'tabtastic' ),
-	        'search_items' => _x( 'Search Tabs', 'tabtastic' ),
-	        'not_found' => _x( 'No tabtastic found', 'tabtastic' ),
-	        'not_found_in_trash' => _x( 'No Tabs found in Trash', 'tabtastic' ),
-	        'parent_item_colon' => _x( 'Parent Tab:', 'tabtastic' ),
-	        'menu_name' => _x( 'Tabs', 'tabtastic' ),
+	        'add_new_item' => _x( 'Add New FullTab', 'tabtastic' ),
+	        'edit_item' => _x( 'Edit FullTab', 'tabtastic' ),
+	        'new_item' => _x( 'New FullTab', 'tabtastic' ),
+	        'view_item' => _x( 'View FullTab', 'tabtastic' ),
+	        'search_items' => _x( 'Search FullTabs', 'tabtastic' ),
+	        'not_found' => _x( 'No fulltabs found', 'tabtastic' ),
+	        'not_found_in_trash' => _x( 'No FullTabs found in Trash', 'tabtastic' ),
+	        'parent_item_colon' => _x( 'Parent FullTab:', 'tabtastic' ),
+	        'menu_name' => _x( 'FullTabs', 'tabtastic' ),
 	    );
 
 	    $args = array( 
@@ -108,9 +108,9 @@ class Tabtastic {
 	        'tabtastic',
 	        array(
 	            'labels' => array(
-	                'name' => 'Tabs Sets',
-	                'add_new_item' => 'Add New Tabs Set',
-	                'new_item_name' => "New Tabs Set"
+	                'name' => 'FullTabs Sets',
+	                'add_new_item' => 'Add New FullTabs Set',
+	                'new_item_name' => "New FullTabs Set"
 	            ),
 	            'show_ui' => true,
 	            'show_tagcloud' => false,
