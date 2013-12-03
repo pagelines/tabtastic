@@ -9,7 +9,7 @@
 	Filter: component
 	PageLines: true
 	v3: true
-	Demo: http://tabtastic.ellenjanemoore.com/tabs
+	Demo: http://dms.elsue.com/tabtastic/
 */
 
 /**

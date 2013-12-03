@@ -9,7 +9,7 @@
 	PageLines: true
 	v3: true
 	Version: 1.0
-	Demo: http://pagelines.ellenjanemoore.com/tabs
+	Demo: http://dms.elsue.com/tabtastic/
 */
 
 /**
@@ -124,7 +124,6 @@ class FullTabs extends PageLinesSection {
 	            array(
 	                'type'		=> 'select_taxonomy',
 					'taxonomy_id'	=> $this->taxID,
-					'default'		=> 'default-tabs',
 	                'title'         => 'Select Tab Set',
 	                'key'           => 'fulltab_set',
 	                'label'         => 'Tab Set'
@@ -134,6 +133,7 @@ class FullTabs extends PageLinesSection {
 		            'key'           => 'fulltab_orderby',
 		            'type'          => 'select', 
 		            'label'         => 'Order Tabs By',
+		            'default'		=> 'ID',
 		            'opts'=> array(
 		                'ID' 		=> array('name' => __( 'Post ID (default)', 'tabtastic') ),
 						'title' 	=> array('name' => __( 'Title', 'tabtastic') ),
@@ -248,10 +248,7 @@ class FullTabs extends PageLinesSection {
 	
 		$fulltabs_id = 'tabs-'.$this->get_the_id();
 		global $post;
-
-		
-
-				
+			
 		// Begin Template	
 
 
