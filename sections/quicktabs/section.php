@@ -106,6 +106,11 @@ class QuickTabs extends PageLinesSection {
 					background-color: #<?php echo $quicktab_title_bg ?>;
 					color: #<?php echo $quicktab_title_color ?>;
 				}
+
+				#quicktabs<?php echo $quicktabs_id ?> .dropdown .tab-<?php echo $active_tabs_id ?>  a {
+					min-width: 120px;
+
+				#quicktabs<?php echo $quicktabs_id ?> .tab-<?php echo $active_tabs_id ?>  a {
 				#quicktabs<?php echo $quicktabs_id ?> .active.tab-<?php echo $active_tabs_id ?> a
 				 {
 					background-color: <?php echo $quicktab_active ?>;

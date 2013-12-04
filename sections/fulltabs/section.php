@@ -342,6 +342,9 @@ class FullTabs extends PageLinesSection {
 							background-color: <?php echo $title_background ?>;
 							color: <?php echo $title_color ?>;
 						}
+						.fulltabs.<?php echo $fulltabs_id ?> ul.dropdown-menu li.tab-<?php echo $post_number ?>  a {
+							min-width: 120px;
+						}
 						.fulltabs.<?php echo $fulltabs_id ?> li.active.tab-<?php echo $post_number ?> a
 						 {
 							background-color: <?php echo $active_background ?>;
