@@ -133,6 +133,7 @@ class QuickTabs extends PageLinesSection {
 			});
 			
 			jQuery(".quicktabs-id-<?php echo $quicktabs_id ?> li.tab a").css("height",(height)+"px"); 
+			jQuery(".quicktabs-id-<?php echo $quicktabs_id ?> ul.dropdown-menu li.tab a").css("height", "auto"); 
 
 				
 
