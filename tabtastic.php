@@ -3,7 +3,7 @@
 Plugin Name: Tabtastic
 Author: elSue
 Author URI: http://dms.elsue.com
-Version: 1.0.0
+Version: 1.0.1
 Description: A simple section that creates text that sizes to fit the container, and is responsive which means it scales with different size browsers.
 Tags: extension
 PageLines: true

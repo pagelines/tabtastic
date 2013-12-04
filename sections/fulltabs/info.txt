@@ -15,6 +15,9 @@ Say goodbye to a page full of shortcodes and say hello to Tabtastic FullTabs!
 
 == Changelog ==
 
+= 1.0.1 =
+* Fixed white-space on tabdrop menu items.
+
 = 1.0 =
 * Initial release.
 

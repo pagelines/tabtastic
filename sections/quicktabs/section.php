@@ -5,7 +5,7 @@
 	Author URI: http://dms.elsue.com
 	Description: Creates tabs using DMS Toolbox and Front End Editing
 	Class Name: QuickTabs
-	Version: 1.0
+	Version: 1.0.1
 	Filter: component
 	PageLines: true
 	v3: true
@@ -22,7 +22,7 @@
 	
 class QuickTabs extends PageLinesSection {
 
-	const version = '1.0';
+	const version = '1.0.1';
 
     // Begin Section Functions 
 
@@ -126,7 +126,7 @@ class QuickTabs extends PageLinesSection {
 			    if(height < jQuery(this).height())
 			        height = jQuery(this).height();    
 			});
-			//+20 because of the top-offset
+			
 			jQuery(".quicktabs-id-<?php echo $quicktabs_id ?> li.tab a").css("height",(height)+"px"); 
 
 				
@@ -156,7 +156,7 @@ class QuickTabs extends PageLinesSection {
 				array(
 					'key'			=> 'quicktabs_max_width',
 					'type' 			=> 'text',
-					'label' 	=> __( 'Width of Each Title Tab (Optional)', 'tabtastic' ),
+					'label' 	=> __( 'Width of Each Title Tab (Optional). Enter number (like 150), px will be added automatically.', 'tabtastic' ),
 				),
 				array(
 					'key'			=> 'quicktabs_nav_text',
