@@ -10,6 +10,11 @@ Tabtastic QuickTabs makes creating and displaying tabbed content on your website
 
 == Changelog ==
 
+= 1.0.2 =
+* Fixed active and hover colors not showing
+* Added minimum height for tabs
+* Added ability to override individual tab colors with colors for all tabs in set.
+
 = 1.0.1 =
 * Fixed white-space on tabdrop menu items.
 

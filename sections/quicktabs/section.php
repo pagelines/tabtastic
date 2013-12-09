@@ -5,7 +5,7 @@
 	Author URI: http://dms.elsue.com
 	Description: Creates tabs using DMS Toolbox and Front End Editing
 	Class Name: QuickTabs
-	Version: 1.0.1
+	Version: 1.0.2
 	Filter: component
 	PageLines: true
 	v3: true
@@ -22,7 +22,7 @@
 	
 class QuickTabs extends PageLinesSection {
 
-	const version = '1.0.1';
+	const version = '1.0.2';
 
     // Begin Section Functions 
 
@@ -37,6 +37,7 @@ class QuickTabs extends PageLinesSection {
 		// Variables
 		$quicktabs_id = $this->get_the_id();
 		$quicktabs_width = ($this->opt('quicktabs_max_width')) ? $this->opt('quicktabs_max_width') : null;
+		$quicktabs_height = ($this->opt('quicktabs_min_height')) ? $this->opt('quicktabs_min_height') : null;
 		$quicktabs_nav_text = ($this->opt('quicktabs_nav_text')) ? $this->opt('quicktabs_nav_text') : __('<i class="icon-align-justify"></i>', 'tabtastic');
 		$quicktabs_nav_color = ( $this->opt( 'quicktabs_nav_color'  ) ) ? $this->opt( 'quicktabs_nav_color'  ) : '000000';
 		$quicktabs_nav_bg = ( $this->opt( 'quicktabs_nav_bg'  ) ) ? $this->opt( 'quicktabs_nav_bg'  ) : 'ffffff';
@@ -70,6 +71,17 @@ class QuickTabs extends PageLinesSection {
 
 		</style>
 		<?php
+	}
+		// Apply Width
+		if($quicktabs_height) {
+			?>
+			<style type="text/css">
+				#quicktabs<?php echo $quicktabs_id ?>  .tab-content > .tab-pane {
+					min-height: <?php echo $quicktabs_height ?>px;
+				}
+
+		</style>
+		<?php
 		}
 		// Styling for Tabdrop Dropdown
 		?>
@@ -94,23 +106,38 @@ class QuickTabs extends PageLinesSection {
 				$quicktab_id = $count.'-'.$quicktabs_id;
 				$active_tabs_id =  $quicktab_id;
 				$quicktab_icon = pl_array_get( 'quicktab_icon', $quicktab );
+				$quicktab_set_title_color = ( $this->opt( 'quicktab_set_title_color'  ) ) ? $this->opt( 'quicktab_set_title_color'  ) : '000';
+				$quicktab_set_title_bg = ( $this->opt( 'quicktab_set_title_bg'  ) ) ? $this->opt( 'quicktab_set_title_bg'  ) : 'dddddd';
+				$color_override = ( $this->opt( 'color_override'  ) ) ? $this->opt( 'color_override'  ) : null;
 				$quicktab_title_color = pl_array_get( 'quicktab_title_color', $quicktab ,'000');
 				$quicktab_title_bg = pl_array_get( 'quicktab_title_bg', $quicktab , 'dedede');
-				$quicktab_active = $this->adjustBrightness($quicktab_title_bg, -20);
+				if($this->opt( 'color_override'  )) {
+					$title_color = '#' . $quicktab_set_title_color;
+				}
+				else {
+					$title_color = '#' . $quicktab_title_color;
+				}
+				if($this->opt( 'color_override'  )) {
+					$title_background = '#' . $quicktab_set_title_bg ;
+				}
+				else {
+					$title_background = '#' . $quicktab_title_bg;
+				}
+				$quicktab_active = $this->adjustBrightness($title_background, -20);
 			
 			// Styles for Background Colors and Text Color
 			
 			?>
 			<style type="text/css">
 				#quicktabs<?php echo $quicktabs_id ?> .tab-<?php echo $active_tabs_id ?>  a {
-					background-color: #<?php echo $quicktab_title_bg ?>;
-					color: #<?php echo $quicktab_title_color ?>;
+					background-color: <?php echo $title_background ?>;
+					color: <?php echo $title_color ?>;
 				}
 
 				#quicktabs<?php echo $quicktabs_id ?> .dropdown .tab-<?php echo $active_tabs_id ?>  a {
 					min-width: 120px;
 
-				#quicktabs<?php echo $quicktabs_id ?> .tab-<?php echo $active_tabs_id ?>  a {
+				}
 				#quicktabs<?php echo $quicktabs_id ?> .active.tab-<?php echo $active_tabs_id ?> a
 				 {
 					background-color: <?php echo $quicktab_active ?>;
@@ -162,13 +189,18 @@ class QuickTabs extends PageLinesSection {
 				array(
 					'key'			=> 'quicktabs_max_width',
 					'type' 			=> 'text',
-					'label' 	=> __( 'Width of Each Title Tab (Optional). Enter number (like 150), px will be added automatically.', 'tabtastic' ),
+					'label' 		=> __( 'Width of Each Title Tab (Optional). Enter number (like 150), px will be added automatically.', 'tabtastic' ),
+				),
+				array(
+					'key'			=> 'quicktabs_min_height',
+					'type' 			=> 'text',
+					'label' 		=> __( 'Minimum Height for Tab Content (Optional). Enter number (like 200), px will be added automatically.', 'tabtastic' ),
 				),
 				array(
 					'key'			=> 'quicktabs_nav_text',
 					'type' 			=> 'text',
 					'default'		=> '<i class="icon-align-justify"></i>',
-					'label' 	=> __( 'Text for More Tabs Navigation. Icon class can be used here', 'tabtastic' ),
+					'label' 		=> __( 'Text for More Tabs Navigation. Icon class can be used here', 'tabtastic' ),
 				),
 				array(
                    'key'           => 'quicktabs_nav_color',
@@ -240,6 +272,48 @@ class QuickTabs extends PageLinesSection {
 
 			)
 	    );
+
+		$options[] = array(
+	            'key'           => 'quicktab_set_colors',
+	            'type'          => 'multi', 
+	            'title'         => 'QuickTab Set Colors (Optional)', 
+	            'col'			=> 1,
+	            'help'			=> 'If you want all QuickTabs to be the same color, check Color Override and enter your colors below.',
+	            'opts'=> array(
+	            	array(
+			            'key'           => 'color_override',
+			            'type'          => 'check',  
+			            'label'			=>  __( 'Override Individual Tab Colors?','tabtastic' ),
+
+			        ),
+	                array(
+	                   'key'           => 'quicktab_set_title_color',
+            			'type'          => 'color', 
+            			'default'		=> '#000000',
+						'label'			=>  __( 'Tab Title Text','tabtastic' ),
+	                ), 
+	                array(
+	                    'key'           => 'quicktab_set_title_bg',
+           				'type'          => 'color', 
+           				'default'		=> '#dddddd',
+						'label'			=>  __( 'Tab Title Background','tabtastic' ),
+									
+	                ),
+	                array(
+	                    'key'           => 'quicktab_set_cont',
+           				'type'          => 'color', 
+           				'default'		=> '#000000',
+						'label'			=>  __( 'Tab Content Text','tabtastic' ),
+	                ),
+	                array(
+	                    'key'           => 'quicktab_set_cont_bg',
+           				'type'          => 'color', 
+           				'default'		=> '#ffffff',
+						'label'			=>  __( 'Tab Content BG','tabtastic' ),
+	                ),
+
+	            )
+	        );
 
 		return $options;
 
@@ -336,19 +410,31 @@ class QuickTabs extends PageLinesSection {
 			$quicktab_id = $count.'-'.$quicktabs_id;
 			$quicktab_text = pl_array_get( 'quicktab_text', $quicktab, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean id lectus sem. Cras consequat lorem.');	
 			$quicktab_text = sprintf('<div data-sync="quicktabs_array%s_quicktab_text">%s</div>', $count, $quicktab_text );
-			$quicktab_title_color = pl_array_get( 'quicktab_title_color', $quicktab ,'000');
-				
+			$quicktab_set_cont = ( $this->opt( 'quicktab_set_cont'  ) ) ? $this->opt( 'quicktab_set_cont'  ) : '000';
+			$quicktab_set_cont_bg = ( $this->opt( 'quicktab_set_cont_bg'  ) ) ? $this->opt( 'quicktab_set_cont_bg'  ) : 'ffffff';	
 			$quicktab_cont_color = pl_array_get( 'quicktab_cont_color', $quicktab ,'000');
 			$quicktab_cont_bg = pl_array_get( 'quicktab_cont_bg', $quicktab , 'ffffff');
-			
+			$color_override = ( $this->opt( 'color_override'  ) ) ? $this->opt( 'color_override'  ) : null;
+					
+					if($color_override) {
+						$style_color = '#' . $quicktab_set_cont;
+					} else {
+						$style_color = '#' . $quicktab_cont_color;
+					}
+					if($color_override) {
+						$style_background = '#' . $quicktab_set_cont_bg;
+					}
+					else {
+						$style_background = '#' . $quicktab_cont_bg;
+					}
 			
 			if ($count == 1) :	
 
 			$output .= sprintf(
-				'<div class="tab-pane fade in active well" id="tab-%s" style="color: #%s; background: #%s;">%s</div>',
+				'<div class="tab-pane fade in active well" id="tab-%s" style="color: %s; background: %s;">%s</div>',
 				$quicktab_id,
-				$quicktab_cont_color,
-				$quicktab_cont_bg,
+				$style_color,
+				$style_background,
 				$quicktab_text
 				
 				
@@ -356,10 +442,10 @@ class QuickTabs extends PageLinesSection {
 
 			else :
 				$output .= sprintf(
-				'<div class="tab-pane fade well" id="tab-%s" style="color: #%s; background: #%s;">%s</div>',
+				'<div class="tab-pane fade well" id="tab-%s" style="color: %s; background: %s;">%s</div>',
 				$quicktab_id,
-				$quicktab_cont_color,
-				$quicktab_cont_bg,
+				$style_color,
+				$style_background,
 				$quicktab_text
 				
 				

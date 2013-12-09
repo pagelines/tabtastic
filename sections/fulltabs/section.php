@@ -8,7 +8,7 @@
 	Filter: component
 	PageLines: true
 	v3: true
-	Version: 1.0.1
+	Version: 1.0.2
 	Demo: http://dms.elsue.com/tabtastic/
 */
 
@@ -25,7 +25,7 @@ class FullTabs extends PageLinesSection {
 	var $taxID = 'tabs-sets';
 	var $ptID = 'tabtastic';
 	
-	const version = '1.0.1';
+	const version = '1.0.2';
 
     // Begin Section Functions 
 
@@ -40,6 +40,7 @@ class FullTabs extends PageLinesSection {
 		$fulltabs_clone = $this->get_the_id();
 		$fulltabs_id = 'tabs-'.$this->get_the_id();
 		$fulltabs_width = ($this->opt('fulltab_max_width')) ? $this->opt('fulltab_max_width') : null;
+		$fulltabs_height = ($this->opt('fulltab_min_height')) ? $this->opt('fulltab_min_height') : null;
 		$fulltab_nav_text = ($this->opt('fulltab_nav_text')) ? $this->opt('fulltab_nav_text') : __('<i class="icon-align-justify"></i>', 'tabtastic');
 		$fulltab_nav_color = ( $this->opt( 'fulltab_nav_color'  ) ) ? $this->opt( 'fulltab_nav_color'  ) : '000000';
 		$fulltab_nav_bg = ( $this->opt( 'fulltab_nav_bg'  ) ) ? $this->opt( 'fulltab_nav_bg'  ) : 'ffffff';
@@ -74,6 +75,17 @@ class FullTabs extends PageLinesSection {
 			<style type="text/css">
 				.fulltabs.<?php echo $fulltabs_id;?> li.tab a{
 					width: <?php echo $fulltabs_width ?>px;
+				}
+		</style>
+		<?php
+		 
+		}
+
+		if($fulltabs_height) {
+			?>
+			<style type="text/css">
+				.fulltabs.<?php echo $fulltabs_id;?> .tab-content > .tab-pane {
+					min-height: <?php echo $fulltabs_height ?>px;
 				}
 		</style>
 		<?php
@@ -165,6 +177,12 @@ class FullTabs extends PageLinesSection {
 	            'col'			=> 2,
 	            'help'			=> 'You may set individual tab colors when you create or edit a tab. Individual tab colors will override the colors set here unless you select Override Tab Colors below.',
 	            'opts'=> array(
+	            	array(
+			            'key'           => 'color_override',
+			            'type'          => 'check',  
+			            'label'			=>  __( 'Override Individual Tab Colors?','tabtastic' ),
+
+			        ),
 	                array(
 	                   'key'           => 'fulltab_set_title_color',
             			'type'          => 'color', 
@@ -190,12 +208,6 @@ class FullTabs extends PageLinesSection {
            				'default'		=> '#ffffff',
 						'label'			=>  __( 'Tab Content BG','tabtastic' ),
 	                ),
-	                array(
-			            'key'           => 'color_override',
-			            'type'          => 'check',  
-			            'label'			=>  __( 'Override Individual Tab Colors?','tabtastic' ),
-
-			        ),
 
 	            )
 	        );
@@ -211,6 +223,11 @@ class FullTabs extends PageLinesSection {
 					'type' 			=> 'text',
 					'label' 	=> __( 'Width of Each Title Tab (Optional). Enter number (like 150), px will be added automatically.', 'tabtastic' ),
 				),
+				array(
+					'key'			=> 'fulltab_min_height',
+					'type' 			=> 'text',
+					'label' 	=> __( 'Minimum Height of Each Tab (Optional). Enter number (like 200), px will be added automatically.', 'tabtastic' ),
+				), 
 				 array(
 					'key'			=> 'fulltab_nav_text',
 					'type' 			=> 'text',
