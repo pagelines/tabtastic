@@ -3,7 +3,7 @@
 Plugin Name: Tabtastic
 Author: elSue
 Author URI: http://dms.elsue.com
-Version: 1.0.2
+Version: 1.0.3
 Description: A simple section that creates text that sizes to fit the container, and is responsive which means it scales with different size browsers.
 Tags: extension
 PageLines: true
@@ -26,6 +26,68 @@ class Tabtastic {
 		add_action( 'admin_enqueue_scripts', array($this,'tabtastic_enqueue_color_picker' ));
 		add_action('admin_head', array($this,'add_tabtastic_colorpicker_script')); 
 		add_action('save_post', array($this,'save_tabtastic_meta'));
+	 	add_action('manage_tabtastic_posts_custom_column', array($this, 'manage_tabtastic_columns'), 10, 2);
+        add_filter('manage_edit-tabtastic_columns', array($this, 'add_new_tabtastic_columns'));
+	}
+    
+    function add_new_tabtastic_columns($gallery_columns) {
+    $new_columns['cb'] = '<input type="checkbox" />';
+     
+        //   $new_columns['id'] = __('ID');
+    $new_columns['title'] = _x('Tab Name', 'column name');
+    $new_columns['author'] = __('Author');
+     
+    $new_columns['tabs_sets'] = __('Tab Set');
+        
+    $new_columns['slug'] = __('Tab Slug');
+        
+    $new_columns['date'] = _x('Date', 'column name');
+ 
+    return $new_columns;
+}
+    
+    
+ 
+	function manage_tabtastic_columns($column, $id){
+	 global $wpdb;
+	 global $post;
+	        switch ($column) {
+	        /* If displaying the 'article_category' column. */
+    case 'tabs_sets' :
+
+        /* Get the genres for the post. */
+        $terms = get_the_terms( $post->ID, 'tabs-sets' );
+
+        /* If terms were found. */
+        if ( !empty( $terms ) ) {
+
+            $out = array();
+
+            /* Loop through each term, linking to the 'edit posts' page for the specific term. */
+            foreach ( $terms as $term ) {
+                $out[] = sprintf( '<a href="%s">%s</a>',
+                    esc_url( add_query_arg( array( 'post_type' => $post->post_type, 'tabs-sets' => $term->slug ), 'edit.php' ) ),
+                    esc_html( sanitize_term_field( 'name', $term->name, $term->term_id, 'tabs-sets', 'display' ) )
+                );
+            }
+
+            /* Join the terms, separating them with a comma. */
+            echo join( ', ', $out );
+        }
+
+        /* If no terms were found, output a default message. */
+        else {
+            _e( 'No Tab Sets' );
+        }
+
+        break;	
+	        case 'slug':
+	            $text = basename(get_post_permalink($id));
+	            echo $text;
+	            break;
+	        default:
+	            break;
+	        } // end switch
 	}
 
 
@@ -114,6 +176,7 @@ class Tabtastic {
 	                'new_item_name' => "New FullTabs Set"
 	            ),
 	            'show_ui' => true,
+				'show_admin_column' => true,
 	            'show_tagcloud' => false,
 	            'hierarchical' => true
 	           

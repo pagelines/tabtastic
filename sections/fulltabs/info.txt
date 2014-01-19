@@ -15,6 +15,10 @@ Say goodbye to a page full of shortcodes and say hello to Tabtastic FullTabs!
 
 == Changelog ==
 
+= 1.0.3 =
+* Added wp-admin columns for FullTabs post type
+* Open tab on page load from tab hash value
+
 = 1.0.2 =
 * Added minimum height for tabs
 

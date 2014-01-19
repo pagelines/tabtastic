@@ -8,7 +8,7 @@
 	Filter: component
 	PageLines: true
 	v3: true
-	Version: 1.0.2
+	Version: 1.0.3
 	Demo: http://dms.elsue.com/tabtastic/
 */
 
@@ -25,7 +25,7 @@ class FullTabs extends PageLinesSection {
 	var $taxID = 'tabs-sets';
 	var $ptID = 'tabtastic';
 	
-	const version = '1.0.2';
+	const version = '1.0.3';
 
     // Begin Section Functions 
 
@@ -37,8 +37,8 @@ class FullTabs extends PageLinesSection {
 
 	
 	function section_head(){
-		$fulltabs_clone = $this->get_the_id();
-		$fulltabs_id = 'tabs-'.$this->get_the_id();
+		
+		$fulltabs_id = $this->get_the_id();
 		$fulltabs_width = ($this->opt('fulltab_max_width')) ? $this->opt('fulltab_max_width') : null;
 		$fulltabs_height = ($this->opt('fulltab_min_height')) ? $this->opt('fulltab_min_height') : null;
 		$fulltab_nav_text = ($this->opt('fulltab_nav_text')) ? $this->opt('fulltab_nav_text') : __('<i class="icon-align-justify"></i>', 'tabtastic');
@@ -50,6 +50,46 @@ class FullTabs extends PageLinesSection {
 		?>
 		<script>
 			jQuery(document).ready(function(){
+			
+				
+
+				// Javascript to enable link to tab
+				var url = document.location.toString();
+				if (url.match('#fulltab-<?php echo $fulltabs_id ?>')) {
+					 jQuery('#fulltabs<?php echo $fulltabs_id ?> .nav-tabs a[href=#'+url.split('#')[1]+']').tab('show') ;
+				    
+				    if (location.hash) { 
+				    var fulltab_height = jQuery('#fulltabs<?php echo $fulltabs_id ?> .nav-tabs').height();  
+				     
+				    	jQuery('body').animate({
+				   			scrollTop: jQuery('#fulltabs<?php echo $fulltabs_id;?> .nav-tabs').offset().top + -(fulltab_height * 2)
+					});
+				   }
+				    
+				} 
+
+				jQuery('a').click(function(e){
+					// Javascript to enable link to tab
+				var url = jQuery(e.target).attr("href");
+				if(url) {
+				if (url.match('#fulltab-<?php echo $fulltabs_id ?>')) {
+					
+					
+						jQuery('#fulltabs<?php echo $fulltabs_id ?> .nav-tabs a[href=#'+url.split('#')[1]+']').tab('show') ;
+				    
+				    if (location.hash) { 
+				    var fulltab_height = jQuery('#fulltabs<?php echo $fulltabs_id ?> .nav-tabs').height();  
+				     
+				    	jQuery('body').animate({
+				   			scrollTop: jQuery('#fulltabs<?php echo $fulltabs_id;?> .nav-tabs').offset().top + -(fulltab_height * 2)
+					});
+				   }
+				    
+				} 	
+			}
+
+				});
+
 			
 					jQuery('.fulltabs.<?php echo $fulltabs_id;?> .nav-tabs').tabdrop({
 						text: '<?php echo $fulltab_nav_text ?>'
@@ -94,16 +134,16 @@ class FullTabs extends PageLinesSection {
 		// Styling for Tabdrop Dropdown
 		?>
 			<style>
-				#fulltabs<?php echo $fulltabs_clone ?> .tabdrop .dropdown-toggle {
+				#fulltabs<?php echo $fulltabs_id ?> .tabdrop .dropdown-toggle {
 					color: #<?php echo $fulltab_nav_color ?>;
 					background: #<?php echo $fulltab_nav_bg ?>;
 				}
-				#fulltabs<?php echo $fulltabs_clone ?> .tabdrop .caret{
+				#fulltabs<?php echo $fulltabs_id ?> .tabdrop .caret{
 					border-top-color: #<?php echo $fulltab_nav_color ?>;
 					border-bottom-color: #<?php echo $fulltab_nav_color ?>;
 					
 				}
-				#fulltabs<?php echo $fulltabs_clone ?> .tabdrop .dropdown-toggle:hover {
+				#fulltabs<?php echo $fulltabs_id ?> .tabdrop .dropdown-toggle:hover {
 					background: <?php echo $fulltab_nav_hover ?>;
 				}
 				
@@ -301,10 +341,11 @@ class FullTabs extends PageLinesSection {
 	function draw_fulltab_title(){
 		global $post;
 		$fulltabs_query = $this->fulltabs_query();
-		$fulltabs_id = 'tabs-'.$this->get_the_id();	
-		?>
-		<ul class="nav nav-tabs ">
-			<?php if ( $fulltabs_query->have_posts() ) : $title_count=0; while ( $fulltabs_query->have_posts() ) : $title_count++; $fulltabs_query->the_post();	
+		$fulltabs_id = 'tabs-'.$this->get_the_id();
+		$fulltab_id = $this->get_the_id();	
+	
+		printf('<ul class="nav nav-tabs" id="%s">' ,$fulltabs_id);
+			 if ( $fulltabs_query->have_posts() ) : $title_count=0; while ( $fulltabs_query->have_posts() ) : $title_count++; $fulltabs_query->the_post();	
 						
 				$fulltab_set_title_color = ( $this->opt( 'fulltab_set_title_color'  ) ) ? $this->opt( 'fulltab_set_title_color'  ) : '000';
 				$fulltab_set_title_bg = ( $this->opt( 'fulltab_set_title_bg'  ) ) ? $this->opt( 'fulltab_set_title_bg'  ) : 'dddddd';
@@ -329,9 +370,9 @@ class FullTabs extends PageLinesSection {
 				}
 				
 				$active_background = $this->adjustBrightness($title_background, -20);
-				$post_number= $post->ID . '-' .$fulltabs_id;	
+				$post_number= $fulltab_id . '-'. $post->ID ;	
 				if($title_count == 1) {
-				 printf('<li class="tab tab-%s active"><a href="#tab-%s" data-toggle="tab">',
+				 printf('<li class="tab tab-%s active"><a href="#fulltab-%s" data-toggle="tab">',
 					$post_number,
 					$post_number
 					
@@ -342,7 +383,7 @@ class FullTabs extends PageLinesSection {
 			</a></li>
 			<?php
 				} else {
-					 printf('<li class="tab tab-%s"><a href="#tab-%s" data-toggle="tab">',
+					 printf('<li class="tab tab-%s"><a href="#fulltab-%s" data-toggle="tab">',
 					$post_number,
 					$post_number
 					
@@ -386,6 +427,8 @@ class FullTabs extends PageLinesSection {
 		global $post; 
 		$fulltabs_query=$this->fulltabs_query();
 		$fulltabs_id = 'tabs-'.$this->get_the_id();
+		$fulltab_id = $this->get_the_id();	
+		
 		?>
 			<div class="tab-content">
 				<?php if ( $fulltabs_query->have_posts() ) : $content_count=0; while ( $fulltabs_query->have_posts() ) : $content_count++; $fulltabs_query->the_post(); 
@@ -415,11 +458,11 @@ class FullTabs extends PageLinesSection {
 					}
 
 					
-					$post_number= $post->ID . '-' .$fulltabs_id;			
+					$post_number= $fulltab_id . '-'. $post->ID ;			
 					
 					
 					if($content_count == 1) {
-					printf('<div class="tab-pane fade in well tab-%s active" id="tab-%s">' , $post_number,  $post_number);
+					printf('<div class="tab-pane fade in well tab-%s active" id="fulltab-%s">' , $post_number,  $post_number);
 								the_content(); 
 								if ( current_user_can('edit_post' , $post->ID) ) {       
 							    printf('<a href="%s">[edit]</a>' , $edit_link);
@@ -428,7 +471,7 @@ class FullTabs extends PageLinesSection {
 							</div>
 						<?php
 					} else {
-						printf('<div class="tab-pane fade well tab-%s" id="tab-%s">' , $post_number,  $post_number);
+						printf('<div class="tab-pane fade well tab-%s" id="fulltab-%s">' , $post_number,  $post_number);
 								the_content();
 								if ( current_user_can('edit_post' , $post->ID) ) {       
 							    printf('<a href="%s">[edit]</a>' , $edit_link);

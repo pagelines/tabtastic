@@ -9,6 +9,8 @@ Tabtastic QuickTabs makes creating and displaying tabbed content on your website
 * Multiple QuickTabs on a page
 
 == Changelog ==
+= 1.0.3 =
+* Open tab on page load from tab hash value
 
 = 1.0.2 =
 * Fixed active and hover colors not showing
