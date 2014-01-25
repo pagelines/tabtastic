@@ -76,7 +76,7 @@ class FullTabs extends PageLinesSection {
                 if(url) {
                 if (url.match('#fulltab-<?php echo $fulltabs_clone ?>')) {
                      
-                     
+                     	e.preventDefault();
                         jQuery('#fulltabs<?php echo $fulltabs_clone ?> .nav-tabs a[href=#'+url.split('#')[1]+']').tab('show') ;
                      
                     if (location.hash) { 

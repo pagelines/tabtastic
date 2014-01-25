@@ -76,6 +76,7 @@ class QuickTabs extends PageLinesSection {
 				var url = jQuery(e.target).attr("href");
 				if(url) {
 				if (url.match('#quicktab-<?php echo $quicktabs_id ?>')) {
+					e.preventDefault();
 					
 						jQuery('#quicktabs<?php echo $quicktabs_id ?> .nav-tabs a[href=#'+url.split('#')[1]+']').tab('show') ;
 				    
