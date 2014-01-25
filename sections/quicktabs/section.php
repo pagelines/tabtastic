@@ -76,15 +76,17 @@ class QuickTabs extends PageLinesSection {
 				var url = jQuery(e.target).attr("href");
 				if(url) {
 				if (url.match('#quicktab-<?php echo $quicktabs_id ?>')) {
+					
 					e.preventDefault();
 					
 						jQuery('#quicktabs<?php echo $quicktabs_id ?> .nav-tabs a[href=#'+url.split('#')[1]+']').tab('show') ;
 				    
-				    if (location.hash) { 
-				    var fulltab_height = jQuery('#quicktabs<?php echo $quicktabs_id ?> .nav-tabs').height();  
-				     
+				    if (url.match('#quicktab-<?php echo $quicktabs_id ?>')) { 
+
+				    var quicktab_height = jQuery('#quicktabs<?php echo $quicktabs_id ?> .nav-tabs').height();  
+
 				    	jQuery('body').animate({
-				   			scrollTop: jQuery('#quicktabs<?php echo $quicktabs_id;?> .nav-tabs').offset().top + -(fulltab_height * 2)
+				   			scrollTop: jQuery('#quicktabs<?php echo $quicktabs_id;?> .nav-tabs').offset().top + -(quicktab_height * 2)
 					});
 				   }
 				    

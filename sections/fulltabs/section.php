@@ -79,9 +79,9 @@ class FullTabs extends PageLinesSection {
                      	e.preventDefault();
                         jQuery('#fulltabs<?php echo $fulltabs_clone ?> .nav-tabs a[href=#'+url.split('#')[1]+']').tab('show') ;
                      
-                    if (location.hash) { 
+                    if (url.match('#fulltab-<?php echo $fulltabs_clone ?>')) { 
                     var fulltab_height = jQuery('#fulltabs<?php echo $fulltabs_clone ?> .nav-tabs').height();  
-                      
+                      console.log(fulltab_height);
                         jQuery('body').animate({
                             scrollTop: jQuery('#fulltabs<?php echo $fulltabs_clone;?> .nav-tabs').offset().top + -(fulltab_height * 2)
                     });
