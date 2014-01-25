@@ -5,7 +5,7 @@
 	Author URI: http://dms.elsue.com
 	Description: Creates tabs using DMS Toolbox and Front End Editing
 	Class Name: QuickTabs
-	Version: 1.0.2
+	Version: 1.0.3
 	Filter: component
 	PageLines: true
 	v3: true
@@ -22,7 +22,7 @@
 	
 class QuickTabs extends PageLinesSection {
 
-	const version = '1.0.2';
+	const version = '1.0.3';
 
     // Begin Section Functions 
 
@@ -48,11 +48,54 @@ class QuickTabs extends PageLinesSection {
 			$quicktabs_array = array( array(), array(), array() );
 		}
 
-		// Initiate Tabdrop
+		
 		?>
 		<script>
+
+		
 			jQuery(document).ready(function(){
-				jQuery('.quicktabs .nav-tabs').tabdrop({
+			
+
+				// Javascript to enable link to tab
+				var url = document.location.toString();
+				if (url.match('#quicktab-<?php echo $quicktabs_id ?>')) {
+				    jQuery('#quicktabs<?php echo $quicktabs_id ?> .nav-tabs a[href=#'+url.split('#')[1]+']').tab('show') ;
+				    if (location.hash) { 
+				    	
+					    var quicktabtab_height = jQuery('#quicktabs<?php echo $quicktabs_id ?> .nav-tabs').height();  
+					    
+					    jQuery('body').animate({
+					   		scrollTop: jQuery("#quicktabs<?php echo $quicktabs_id ?> .nav-tabs").offset().top + -(quicktabtab_height)
+						});
+				   }
+				    
+				} 
+
+				jQuery('a').click(function(e){
+					// Javascript to enable link to tab
+				var url = jQuery(e.target).attr("href");
+				if(url) {
+				if (url.match('#quicktab-<?php echo $quicktabs_id ?>')) {
+					
+						jQuery('#quicktabs<?php echo $quicktabs_id ?> .nav-tabs a[href=#'+url.split('#')[1]+']').tab('show') ;
+				    
+				    if (location.hash) { 
+				    var fulltab_height = jQuery('#quicktabs<?php echo $quicktabs_id ?> .nav-tabs').height();  
+				     
+				    	jQuery('body').animate({
+				   			scrollTop: jQuery('#quicktabs<?php echo $quicktabs_id;?> .nav-tabs').offset().top + -(fulltab_height * 2)
+					});
+				   }
+				    
+				} 	
+			}
+
+				});
+
+
+
+				// Initiate Tabdrop
+				jQuery('#quicktabs<?php echo $quicktabs_id ?> .quicktabs .nav-tabs').tabdrop({
 					text: '<?php echo $quicktabs_nav_text ?>'
 				});
 
@@ -60,6 +103,7 @@ class QuickTabs extends PageLinesSection {
 			
 		
 		</script>
+
 		<?php 
 		// Apply Width
 		if($quicktabs_width) {
@@ -72,7 +116,7 @@ class QuickTabs extends PageLinesSection {
 		</style>
 		<?php
 	}
-		// Apply Width
+		// Apply Height
 		if($quicktabs_height) {
 			?>
 			<style type="text/css">
@@ -103,7 +147,7 @@ class QuickTabs extends PageLinesSection {
 		<?php
 			if( is_array($quicktabs_array) ){
 			foreach( $quicktabs_array as $quicktab ){
-				$quicktab_id = $count.'-'.$quicktabs_id;
+				$quicktab_id = $quicktabs_id.'-'.$count;
 				$active_tabs_id =  $quicktab_id;
 				$quicktab_icon = pl_array_get( 'quicktab_icon', $quicktab );
 				$quicktab_set_title_color = ( $this->opt( 'quicktab_set_title_color'  ) ) ? $this->opt( 'quicktab_set_title_color'  ) : '000';
@@ -351,7 +395,7 @@ class QuickTabs extends PageLinesSection {
 			
 			foreach( $quicktabs_array as $quicktab ){
 
-			$quicktab_id = $count.'-'.$quicktabs_id;
+			$quicktab_id = $quicktabs_id.'-'.$count;
 			$quicktab_icon = pl_array_get( 'quicktab_icon', $quicktab );
 			$quicktab_title = pl_array_get( 'quicktab_title', $quicktab, __('Quick Tab ', 'tabtastic')); 
 			$icon_html = sprintf('<i class="icon icon-%s"></i>', $quicktab_icon);
@@ -362,7 +406,7 @@ class QuickTabs extends PageLinesSection {
 				
 			if ($count == 1) :
 				$output .= sprintf(
-				'<li class="tab tab-%s active"><a href="#tab-%s" data-toggle="tab">%s</a></li>',
+				'<li class="tab tab-%s active"><a href="#quicktab-%s" data-toggle="tab">%s</a></li>',
 				$quicktab_id,
 				
 				$quicktab_id,
@@ -373,7 +417,7 @@ class QuickTabs extends PageLinesSection {
 			else :
 				
 				$output .= sprintf(
-					'<li class="tab tab-%s"><a href="#tab-%s" data-toggle="tab">%s</a></li>',
+					'<li class="tab tab-%s"><a href="#quicktab-%s" data-toggle="tab">%s</a></li>',
 					$quicktab_id,
 					
 					$quicktab_id,
@@ -407,7 +451,7 @@ class QuickTabs extends PageLinesSection {
 			$quicktabs_tabs = count( $quicktabs_array );
 			
 			foreach( $quicktabs_array as $quicktab ){
-			$quicktab_id = $count.'-'.$quicktabs_id;
+			$quicktab_id = $quicktabs_id.'-'.$count;
 			$quicktab_text = pl_array_get( 'quicktab_text', $quicktab, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean id lectus sem. Cras consequat lorem.');	
 			$quicktab_text = sprintf('<div data-sync="quicktabs_array%s_quicktab_text">%s</div>', $count, $quicktab_text );
 			$quicktab_set_cont = ( $this->opt( 'quicktab_set_cont'  ) ) ? $this->opt( 'quicktab_set_cont'  ) : '000';
@@ -431,7 +475,7 @@ class QuickTabs extends PageLinesSection {
 			if ($count == 1) :	
 
 			$output .= sprintf(
-				'<div class="tab-pane fade in active well" id="tab-%s" style="color: %s; background: %s;">%s</div>',
+				'<div class="tab-pane fade in active well" id="quicktab-%s" style="color: %s; background: %s;">%s</div>',
 				$quicktab_id,
 				$style_color,
 				$style_background,
@@ -442,7 +486,7 @@ class QuickTabs extends PageLinesSection {
 
 			else :
 				$output .= sprintf(
-				'<div class="tab-pane fade well" id="tab-%s" style="color: %s; background: %s;">%s</div>',
+				'<div class="tab-pane fade well" id="quicktab-%s" style="color: %s; background: %s;">%s</div>',
 				$quicktab_id,
 				$style_color,
 				$style_background,
