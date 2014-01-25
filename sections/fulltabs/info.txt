@@ -15,6 +15,10 @@ Say goodbye to a page full of shortcodes and say hello to Tabtastic FullTabs!
 
 == Changelog ==
 
+= 1.0.4 =
+* Fixed open tab on page load from tab hash value
+* Fixed tabdrop not working
+
 = 1.0.3 =
 * Added wp-admin columns for FullTabs post type
 * Open tab on page load from tab hash value
