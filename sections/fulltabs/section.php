@@ -8,7 +8,7 @@
 	Filter: component
 	PageLines: true
 	v3: true
-	Version: 1.0.4
+	Version: 1.0.5
 	Demo: http://dms.elsue.com/tabtastic/
 */
 
@@ -25,7 +25,7 @@ class FullTabs extends PageLinesSection {
 	var $taxID = 'tabs-sets';
 	var $ptID = 'tabtastic';
 	
-	const version = '1.0.4';
+	const version = '1.0.5';
 
     // Begin Section Functions 
 
