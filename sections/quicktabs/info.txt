@@ -9,6 +9,9 @@ Tabtastic QuickTabs makes creating and displaying tabbed content on your website
 * Multiple QuickTabs on a page
 
 == Changelog ==
+= 1.0.6 =
+* Fixed icon html for DMS 2
+
 = 1.0.5 =
 * Fixed tab on page load from tab hash value
 

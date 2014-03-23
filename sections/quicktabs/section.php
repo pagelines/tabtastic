@@ -5,7 +5,7 @@
 	Author URI: http://dms.elsue.com
 	Description: Creates tabs using DMS Toolbox and Front End Editing
 	Class Name: QuickTabs
-	Version: 1.0.5
+	Version: 1.0.6
 	Filter: component
 	PageLines: true
 	v3: true
@@ -22,7 +22,7 @@
 	
 class QuickTabs extends PageLinesSection {
 
-	const version = '1.0.5';
+	const version = '1.0.6';
 
     // Begin Section Functions 
 
@@ -38,7 +38,7 @@ class QuickTabs extends PageLinesSection {
 		$quicktabs_id = $this->get_the_id();
 		$quicktabs_width = ($this->opt('quicktabs_max_width')) ? $this->opt('quicktabs_max_width') : null;
 		$quicktabs_height = ($this->opt('quicktabs_min_height')) ? $this->opt('quicktabs_min_height') : null;
-		$quicktabs_nav_text = ($this->opt('quicktabs_nav_text')) ? $this->opt('quicktabs_nav_text') : __('<i class="icon-align-justify"></i>', 'tabtastic');
+		$quicktabs_nav_text = ($this->opt('quicktabs_nav_text')) ? $this->opt('quicktabs_nav_text') : __('<i class="icon icon-align-justify"></i>', 'tabtastic');
 		$quicktabs_nav_color = ( $this->opt( 'quicktabs_nav_color'  ) ) ? $this->opt( 'quicktabs_nav_color'  ) : '000000';
 		$quicktabs_nav_bg = ( $this->opt( 'quicktabs_nav_bg'  ) ) ? $this->opt( 'quicktabs_nav_bg'  ) : 'ffffff';
 		$quicktabs_nav_hover = $this->adjustBrightness($quicktabs_nav_bg, -20);
@@ -246,7 +246,7 @@ class QuickTabs extends PageLinesSection {
 				array(
 					'key'			=> 'quicktabs_nav_text',
 					'type' 			=> 'text',
-					'default'		=> '<i class="icon-align-justify"></i>',
+					'default'		=> '<i class="icon icon-align-justify"></i>',
 					'label' 		=> __( 'Text for More Tabs Navigation. Icon class can be used here', 'tabtastic' ),
 				),
 				array(

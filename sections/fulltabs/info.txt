@@ -15,6 +15,9 @@ Say goodbye to a page full of shortcodes and say hello to Tabtastic FullTabs!
 
 == Changelog ==
 
+= 1.0.6 =
+* Fixed icon html for DMS 2
+
 = 1.0.5 =
 * Fixed open tab on page load from tab hash value
 * Fixed tabdrop not working

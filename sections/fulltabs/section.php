@@ -8,7 +8,7 @@
 	Filter: component
 	PageLines: true
 	v3: true
-	Version: 1.0.5
+	Version: 1.0.6
 	Demo: http://dms.elsue.com/tabtastic/
 */
 
@@ -25,7 +25,7 @@ class FullTabs extends PageLinesSection {
 	var $taxID = 'tabs-sets';
 	var $ptID = 'tabtastic';
 	
-	const version = '1.0.5';
+	const version = '1.0.6';
 
     // Begin Section Functions 
 
@@ -41,7 +41,7 @@ class FullTabs extends PageLinesSection {
 		$fulltabs_id = 'tabs-'.$this->get_the_id();
 		$fulltabs_width = ($this->opt('fulltab_max_width')) ? $this->opt('fulltab_max_width') : null;
 		$fulltabs_height = ($this->opt('fulltab_min_height')) ? $this->opt('fulltab_min_height') : null;
-		$fulltab_nav_text = ($this->opt('fulltab_nav_text')) ? $this->opt('fulltab_nav_text') : __('<i class="icon-align-justify"></i>', 'tabtastic');
+		$fulltab_nav_text = ($this->opt('fulltab_nav_text')) ? $this->opt('fulltab_nav_text') : __('<i class="icon icon-align-justify"></i>', 'tabtastic');
 		$fulltab_nav_color = ( $this->opt( 'fulltab_nav_color'  ) ) ? $this->opt( 'fulltab_nav_color'  ) : '000000';
 		$fulltab_nav_bg = ( $this->opt( 'fulltab_nav_bg'  ) ) ? $this->opt( 'fulltab_nav_bg'  ) : 'ffffff';
 		$fulltab_nav_hover = $this->adjustBrightness($fulltab_nav_bg, -20);
@@ -268,7 +268,7 @@ class FullTabs extends PageLinesSection {
 				 array(
 					'key'			=> 'fulltab_nav_text',
 					'type' 			=> 'text',
-					'default'		=> '<i class="icon-align-justify"></i>',
+					'default'		=> '<i class="icon icon-align-justify"></i>',
 					'label' 	=> __( 'Text for More Tabs Navigation. Icon class can be used here', 'tabtastic' ),
 				),
 				array(
