@@ -5,7 +5,7 @@
 	Author URI: http://dms.elsue.com
 	Description: Creates tabs using DMS Toolbox and Front End Editing
 	Class Name: QuickTabs
-	Version: 1.0.6
+	Version: 1.0.7
 	Filter: component
 	PageLines: true
 	v3: true
@@ -22,7 +22,7 @@
 	
 class QuickTabs extends PageLinesSection {
 
-	const version = '1.0.6';
+	const version = '1.0.7';
 
     // Begin Section Functions 
 
@@ -72,25 +72,29 @@ class QuickTabs extends PageLinesSection {
 				} 
 
 				jQuery('a').click(function(e){
-					// Javascript to enable link to tab
-				var url = jQuery(e.target).attr("href");
-				if(url) {
-				if (url.match('#quicktab-<?php echo $quicktabs_id ?>')) {
-					
-					e.preventDefault();
-					
-						jQuery('#quicktabs<?php echo $quicktabs_id ?> .nav-tabs a[href=#'+url.split('#')[1]+']').tab('show') ;
-				    
-				    if (url.match('#quicktab-<?php echo $quicktabs_id ?>')) { 
+					if(jQuery(this).parent('.tab') ) {
+                		return;
+                	} else {
+						// Javascript to enable link to tab
+					var url = jQuery(e.target).attr("href");
+					if(url) {
+					if (url.match('#quicktab-<?php echo $quicktabs_id ?>')) {
+						
+						e.preventDefault();
+						
+							jQuery('#quicktabs<?php echo $quicktabs_id ?> .nav-tabs a[href=#'+url.split('#')[1]+']').tab('show') ;
+					    
+					    if (url.match('#quicktab-<?php echo $quicktabs_id ?>')) { 
 
-				    var quicktab_height = jQuery('#quicktabs<?php echo $quicktabs_id ?> .nav-tabs').height();  
+					    var quicktab_height = jQuery('#quicktabs<?php echo $quicktabs_id ?> .nav-tabs').height();  
 
-				    	jQuery('body').animate({
-				   			scrollTop: jQuery('#quicktabs<?php echo $quicktabs_id;?> .nav-tabs').offset().top + -(quicktab_height * 2)
-					});
-				   }
-				    
-				} 	
+					    	jQuery('body').animate({
+					   			scrollTop: jQuery('#quicktabs<?php echo $quicktabs_id;?> .nav-tabs').offset().top + -(quicktab_height * 2)
+						});
+					   }
+					    
+					} 
+				}	
 			}
 
 				});

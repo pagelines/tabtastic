@@ -8,7 +8,7 @@
 	Filter: component
 	PageLines: true
 	v3: true
-	Version: 1.0.6
+	Version: 1.0.7
 	Demo: http://dms.elsue.com/tabtastic/
 */
 
@@ -25,7 +25,7 @@ class FullTabs extends PageLinesSection {
 	var $taxID = 'tabs-sets';
 	var $ptID = 'tabtastic';
 	
-	const version = '1.0.6';
+	const version = '1.0.7';
 
     // Begin Section Functions 
 
@@ -55,7 +55,7 @@ class FullTabs extends PageLinesSection {
 						text: '<?php echo $fulltab_nav_text ?>'
 					});
 
-					 // Javascript to enable link to tab
+					 // Javascript to enable link to tab from another page
                 var url = document.location.toString();
                 if (url.match('#fulltab-<?php echo $fulltabs_clone ?>')) {
                      jQuery('#fulltabs<?php echo $fulltabs_clone ?> .nav-tabs a[href=#'+url.split('#')[1]+']').tab('show') ;
@@ -71,23 +71,27 @@ class FullTabs extends PageLinesSection {
                 } 
  
                 jQuery('a').click(function(e){
-                    // Javascript to enable link to tab
-                var url = jQuery(e.target).attr("href");
-                if(url) {
-                if (url.match('#fulltab-<?php echo $fulltabs_clone ?>')) {
-                     
-                     	e.preventDefault();
-                        jQuery('#fulltabs<?php echo $fulltabs_clone ?> .nav-tabs a[href=#'+url.split('#')[1]+']').tab('show') ;
-                     
-                    if (url.match('#fulltab-<?php echo $fulltabs_clone ?>')) { 
-                    var fulltab_height = jQuery('#fulltabs<?php echo $fulltabs_clone ?> .nav-tabs').height();  
-                      console.log(fulltab_height);
-                        jQuery('body').animate({
-                            scrollTop: jQuery('#fulltabs<?php echo $fulltabs_clone;?> .nav-tabs').offset().top + -(fulltab_height * 2)
-                    });
-                   }
-                     
-                }   
+                	if(jQuery(this).parent('.tab') ) {
+                		return;
+                	} else {
+	                    // Javascript to enable link to tab on page
+	                var url = jQuery(e.target).attr("href");
+	                if(url) {
+	                if (url.match('#fulltab-<?php echo $fulltabs_clone ?>')) {
+	                     
+	                     	e.preventDefault();
+	                        jQuery('#fulltabs<?php echo $fulltabs_clone ?> .nav-tabs a[href=#'+url.split('#')[1]+']').tab('show') ;
+	                     
+	                    if (url.match('#fulltab-<?php echo $fulltabs_clone ?>')) { 
+	                    var fulltab_height = jQuery('#fulltabs<?php echo $fulltabs_clone ?> .nav-tabs').height();  
+	                      console.log(fulltab_height);
+	                        jQuery('body').animate({
+	                            scrollTop: jQuery('#fulltabs<?php echo $fulltabs_clone;?> .nav-tabs').offset().top + -(fulltab_height * 2)
+	                    });
+	                   }
+	                     
+	                }  
+                } 
             }
  
                 });
