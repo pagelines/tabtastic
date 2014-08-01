@@ -5,7 +5,7 @@
 	Author URI: http://dms.elsue.com
 	Description: Creates tabs using DMS Toolbox and Front End Editing
 	Class Name: QuickTabs
-	Version: 1.0.7
+	Version: 1.0.8
 	Filter: component
 	PageLines: true
 	v3: true
@@ -22,7 +22,7 @@
 	
 class QuickTabs extends PageLinesSection {
 
-	const version = '1.0.7';
+	const version = '1.0.8';
 
     // Begin Section Functions 
 

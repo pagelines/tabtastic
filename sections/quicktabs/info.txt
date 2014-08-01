@@ -9,6 +9,10 @@ Tabtastic QuickTabs makes creating and displaying tabbed content on your website
 * Multiple QuickTabs on a page
 
 == Changelog ==
+
+= 1.0.8 =
+* Changed Tabtastic icons
+
 = 1.0.7 =
 * Fixed tab movement on click
 = 1.0.6 =

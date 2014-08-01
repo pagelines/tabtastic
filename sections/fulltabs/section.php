@@ -25,7 +25,7 @@ class FullTabs extends PageLinesSection {
 	var $taxID = 'tabs-sets';
 	var $ptID = 'tabtastic';
 	
-	const version = '1.0.7';
+	const version = '1.0.8';
 
     // Begin Section Functions 
 
